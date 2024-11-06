@@ -1,9 +1,19 @@
+"use client"
+
+import { loginAction } from "@/actions/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Lock } from "lucide-react";
 import Link from "next/link";
+import { FormEvent } from "react";
 
 export default function LoginPage() {
+
+  function handleLogin(e: FormEvent) {
+    console.log(e);
+
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted-foreground/5 p-4">
       <div className="w-full max-w-md bg-background rounded-lg shadow-lg overflow-hidden">
@@ -14,7 +24,7 @@ export default function LoginPage() {
           <p className="mb-6 mt-2 text-muted-foreground text-sm">
             Enter username and password to login
           </p>
-          <form className="space-y-4 my-2">
+          <form action={loginAction} className="space-y-4 my-2">
             <div className="relative">
               <Mail
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
