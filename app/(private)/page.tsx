@@ -1,3 +1,5 @@
-export default function Home() {
-  return <div className="p-8"></div>;
+import { redirect } from "next/navigation";
+
+export default function MainPage() {
+  redirect("/personal-info");
 }
