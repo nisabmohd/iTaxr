@@ -1,11 +1,11 @@
 import { users } from "./user.sql";
 import { z } from "zod";
-import { db } from "@/db";
-import { hashPassword, id } from "@/db/helper";
+import { db } from "@/db/client";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
-import { createSession } from "@/actions/session";
+import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { hashPassword, id } from "@/lib/sql";
 
 export const userRegistrationSchema = z.object({
   firstName: z.string(),

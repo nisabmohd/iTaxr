@@ -49,3 +49,9 @@ export async function createSession(user: User) {
     expires: expiresAt,
   });
 }
+
+export async function getSession() {
+  const session = cookies().get("session")?.value;
+  if (!session) return undefined;
+  return await decrypt(session);
+}
