@@ -8,7 +8,9 @@ export default function PrivateLayout({ children }: PropsWithChildren) {
       <Navbar />
       <div className="flex items-start h-[94vh] relative">
         <Leftbar />
-        <div className="flex-[9] h-full overflow-y-auto p-8">{children}</div>
+        <div className="flex-[9] h-full overflow-y-auto px-16 py-10">
+          {children}
+        </div>
       </div>
     </div>
   );

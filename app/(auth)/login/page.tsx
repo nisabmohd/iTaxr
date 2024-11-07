@@ -1,83 +1,111 @@
-"use client"
+"use client";
 
 import { loginAction } from "@/actions/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Lock } from "lucide-react";
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { z } from 'zod'
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string()
-})
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const [userInput, setUserInput] = useState({
-    email: "",
-    password: "",
-  })
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-    setUserInput(prev => {
-      return { ...prev, [e.target.name]: e.target.value }
-    })
-  }
-
-  async function handleLogin(e: FormEvent) {
-    e.preventDefault()
-    const { data, error } = loginSchema.safeParse(userInput)
-    // todo handle this case
-    if (error) return;
-    await loginAction(data)
+  async function onSubmit(data: LoginFormValues) {
+    await loginAction(data);
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted-foreground/5 p-4">
       <div className="w-full max-w-md bg-background rounded-lg shadow-lg overflow-hidden">
-        <div className="px-6 py-8 text-center grid">
+        <div className="px-6 py-8 grid">
           <h2 className="text-2xl font-semibold text-center text-gray-800">
             Login to Taxpage
           </h2>
-          <p className="mb-6 mt-2 text-muted-foreground text-sm">
+          <p className="mb-6 mt-2 text-muted-foreground text-sm text-center">
             Enter username and password to login
           </p>
-          <form onSubmit={handleLogin} className="space-y-4 my-2">
-            <div className="relative">
-              <Mail
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <Input
-                onChange={handleInputChange}
-                value={userInput.email}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 my-2"
+            >
+              <FormField
+                control={form.control}
                 name="email"
-                type="email"
-                placeholder="Email"
-                className="w-full pl-11 h-12"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="relative">
+                        <Mail
+                          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          size={20}
+                        />
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="Email"
+                          className="w-full pl-11 h-12"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-[13px]" />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="relative">
-              <Lock
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <Input
-                onChange={handleInputChange}
-                value={userInput.password}
+              <FormField
+                control={form.control}
                 name="password"
-                type="password"
-                placeholder="Password"
-                className="w-full pl-11 h-12"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="relative">
+                        <Lock
+                          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          size={20}
+                        />
+                        <Input
+                          {...field}
+                          type="password"
+                          placeholder="Password"
+                          className="w-full pl-11 h-12"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage className="text-[13px]" />
+                  </FormItem>
+                )}
               />
-            </div>
-            <Button type="submit" size="lg" className="w-full">
-              Login
-            </Button>
-          </form>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full !mt-5 bg-blue-500 hover:bg-blue-600"
+              >
+                Login
+              </Button>
+            </form>
+          </Form>
         </div>
         <div className="px-6 py-4 bg-muted-foreground/5">
           <div className="flex justify-between items-center">
