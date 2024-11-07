@@ -15,6 +15,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import Image from "next/image";
 
 const userRegistrationSchema = z
   .object({
@@ -81,6 +82,13 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-lg bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="px-6 py-8 grid">
+          <Image
+            src="/assets/logo.jpeg"
+            alt="logo"
+            width={90}
+            height={50}
+            className="mx-auto mb-4"
+          />
           <h2 className="text-2xl font-semibold text-center text-gray-800">
             Register to Taxpage
           </h2>
