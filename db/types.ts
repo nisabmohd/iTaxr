@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { bigint, char, timestamp as rawTs, json } from "drizzle-orm/mysql-core";
+import { timestamp as rawTs } from "drizzle-orm/mysql-core";
 import { customAlphabet } from 'nanoid'
 import bcrypt from "bcrypt";
 
@@ -22,6 +22,6 @@ export const timestamps = {
     timeDeleted: timestamp("time_deleted"),
 };
 
-export const hashPassword = async(password: string) => {
+export const hashPassword = async (password: string) => {
     return await bcrypt.hash(password, 10)
 }

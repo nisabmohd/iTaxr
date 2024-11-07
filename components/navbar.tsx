@@ -1,6 +1,7 @@
 import { CircleDollarSignIcon, LogOutIcon, UserIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import {  logoutAction } from "@/actions/auth";
 
 export default function Navbar() {
   return (
@@ -15,10 +16,12 @@ export default function Navbar() {
             <UserIcon className="w-4 h-4" />
             John Doe
           </Button>
-          <Button variant="ghost">
-            <LogOutIcon className="w-4 h-4 text-destructive" />
-            Logout
-          </Button>
+          <form action={logoutAction}>
+            <Button variant="ghost">
+              <LogOutIcon className="w-4 h-4 text-destructive" />
+              Logout
+            </Button>
+          </form>
         </div>
       </div>
     </nav>

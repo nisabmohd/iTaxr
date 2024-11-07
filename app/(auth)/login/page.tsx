@@ -5,13 +5,32 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Lock } from "lucide-react";
 import Link from "next/link";
-import { FormEvent } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { z } from 'zod'
+
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string()
+})
 
 export default function LoginPage() {
+  const [userInput, setUserInput] = useState({
+    email: "",
+    password: "",
+  })
 
-  function handleLogin(e: FormEvent) {
-    console.log(e);
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+    setUserInput(prev => {
+      return { ...prev, [e.target.name]: e.target.value }
+    })
+  }
 
+  async function handleLogin(e: FormEvent) {
+    e.preventDefault()
+    const { data, error } = loginSchema.safeParse(userInput)
+    // todo handle this case
+    if (error) return;
+    await loginAction(data)
   }
 
   return (
@@ -24,13 +43,15 @@ export default function LoginPage() {
           <p className="mb-6 mt-2 text-muted-foreground text-sm">
             Enter username and password to login
           </p>
-          <form action={loginAction} className="space-y-4 my-2">
+          <form onSubmit={handleLogin} className="space-y-4 my-2">
             <div className="relative">
               <Mail
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 size={20}
               />
               <Input
+                onChange={handleInputChange}
+                value={userInput.email}
                 name="email"
                 type="email"
                 placeholder="Email"
@@ -44,6 +65,8 @@ export default function LoginPage() {
                 size={20}
               />
               <Input
+                onChange={handleInputChange}
+                value={userInput.password}
                 name="password"
                 type="password"
                 placeholder="Password"

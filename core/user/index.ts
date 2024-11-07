@@ -1,13 +1,13 @@
 import { users } from "./user.sql"
 import { z } from 'zod'
-import { fn } from "../util";
 import { db } from "@/db";
 import { hashPassword, id } from "@/db/types";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
+import { createSession } from "@/actions/session";
+import { redirect } from "next/navigation";
 
-
-const UserSchema = z.object({
+export const userRegistrationSchema = z.object({
   firstName: z.string(),
   middleName: z.string().optional(),
   lastName: z.string(),
@@ -30,20 +30,22 @@ const UserSchema = z.object({
     ),
 });
 
-export const register = fn(UserSchema,
-  async (input) => {
-    await db.insert(users).values({
-      id: id(),
-      firstName: input.firstName,
-      middleName: input.middleName,
-      lastName: input.lastName,
-      email: input.email,
-      phoneNumber: input.phoneNumber,
-      officeNumber: input.officeNumber,
-      password: await hashPassword(input.password)
-    })
-  }
-)
+export const register = async (input: z.infer<typeof userRegistrationSchema>) => {
+  const userId = id()
+  await db.insert(users).values({
+    id: userId,
+    firstName: input.firstName,
+    middleName: input.middleName,
+    lastName: input.lastName,
+    email: input.email,
+    phoneNumber: input.phoneNumber,
+    officeNumber: input.officeNumber,
+    password: await hashPassword(input.password)
+  })
+  const user = await db.select().from(users).where(eq(users.id, userId)).limit(1).execute();
+  await createSession(user[0])
+  redirect("/")
+}
 
 
 export const loginSchema = z.object({
@@ -51,28 +53,18 @@ export const loginSchema = z.object({
   password: z.string()
 })
 
+export type User = typeof users.$inferSelect;
 
 export const login = async (input: z.infer<typeof loginSchema>) => {
-    const user = await db.select().from(users).where(eq(users.email, input.email)).execute();
-    if (user.length === 0) {
-      throw new Error("User not found");
-    }
-    const foundUser = user[0];
-
-    const isPasswordValid = await bcrypt.compare(input.password, foundUser.password);
-
-    if (!isPasswordValid) {
-      throw new Error("Invalid password");
-    }
-
-    return {
-      message: "Login successful",
-      user: {
-        id: foundUser.id,
-        firstName: foundUser.firstName,
-        lastName: foundUser.lastName,
-        email: foundUser.email,
-        role: foundUser.role,
-      },
-    }
+  const user = await db.select().from(users).where(eq(users.email, input.email)).limit(1).execute();
+  if (user.length === 0) {
+    throw new Error("User not found");
+  }
+  const userExist = user[0];
+  const isPasswordValid = await bcrypt.compare(input.password, userExist.password);
+  if (!isPasswordValid) {
+    throw new Error("Invalid password");
+  }
+  await createSession(userExist)
+  redirect("/")
 }
