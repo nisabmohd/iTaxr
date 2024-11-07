@@ -13,7 +13,6 @@ export const users = mysqlTable('users', {
     officeNumber: varchar('office_number', { length: 20 }),
     password: varchar('password', { length: 255 }).notNull(),
     role: varchar('role', { length: 50 }).notNull().default('user'),
-
 });
 
 // Indexes for optimizing queries
