@@ -1,5 +1,5 @@
 import { timestamps } from "@/lib/sql";
-import { mysqlTable, varchar, boolean, char } from "drizzle-orm/mysql-core";
+import { mysqlTable, varchar, boolean, char, index } from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
   id: char("id", { length: 10 }).primaryKey(),
@@ -13,12 +13,11 @@ export const users = mysqlTable("users", {
   officeNumber: varchar("office_number", { length: 20 }),
   password: varchar("password", { length: 255 }).notNull(),
   role: varchar("role", { length: 50 }).notNull().default("user"),
+}, {
+  indexes: [
+    index("id_idx").on("id"),
+    index("email_idx").on("email"),
+    index("phone_idx").on("phoneNumber"),
+    index("role_idx").on("role"),
+  ],
 });
-
-// Indexes for optimizing queries
-export const usersIndex = {
-  idIndex: "CREATE INDEX id_idx ON users (id)",
-  emailIndex: "CREATE INDEX email_idx ON users (email)",
-  phoneIndex: "CREATE INDEX phone_idx ON users (phone_number)",
-  roleIndex: "CREATE INDEX role_idx ON users (role)",
-};
