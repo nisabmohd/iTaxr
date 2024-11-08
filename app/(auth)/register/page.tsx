@@ -295,7 +295,7 @@ export default function RegisterPage() {
             </form>
           </Form>
         </div>
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
+        <div className="px-6 py-2 bg-gray-50 border-t border-gray-100">
           <div className="text-center">
             <Link
               href="/login"

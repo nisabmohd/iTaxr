@@ -115,7 +115,7 @@ export default function LoginPage() {
             </form>
           </Form>
         </div>
-        <div className="px-6 py-4 bg-muted-foreground/5">
+        <div className="px-6 py-2 bg-muted-foreground/5">
           <div className="flex justify-between items-center">
             <Link
               href="/reset"

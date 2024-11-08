@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 
 export default function PrivateLayout({ children }: PropsWithChildren) {
   return (
-    <div>
+    <div className="h-screen overflow-hidden">
       <Navbar />
       <div className="flex items-start h-[94vh] relative">
         <Leftbar />
