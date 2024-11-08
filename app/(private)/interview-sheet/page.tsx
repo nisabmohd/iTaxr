@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
+import { states } from "@/lib/utils";
 
 const formSchema = z.object({
   // Personal Information
@@ -148,7 +149,7 @@ export default function InterviewSheetPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-primary">
-                      First Name <span className="text-red-500 ml-1">*</span>
+                      First Name as per SSN <span className="text-red-500 ml-1">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -162,7 +163,7 @@ export default function InterviewSheetPage() {
                 name="middleName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-primary">Middle Name</FormLabel>
+                    <FormLabel className="text-primary">Middle Name as per SSN</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -176,7 +177,7 @@ export default function InterviewSheetPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-primary">
-                      Last Name<span className="text-red-500 ml-1">*</span>
+                      Last Name as per SSN<span className="text-red-500 ml-1">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -187,36 +188,7 @@ export default function InterviewSheetPage() {
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-primary">
-                      Email<span className="text-red-500 ml-1">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input type="email" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[13px]" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-primary">
-                      Phone<span className="text-red-500 ml-1">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input type="tel" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[13px]" />
-                  </FormItem>
-                )}
-              />
+
               <FormField
                 control={form.control}
                 name="ssn"
@@ -232,18 +204,16 @@ export default function InterviewSheetPage() {
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="dob"
+                name="currentAddress"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-primary">
-                      Date of Birth
+                      Current Address
                     </FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage className="text-[13px]" />
                   </FormItem>
@@ -251,11 +221,27 @@ export default function InterviewSheetPage() {
               />
               <FormField
                 control={form.control}
-                name="maritalStatus"
+                name="currentCity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-primary">Current City</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage className="text-[13px]" />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+              <FormField
+                control={form.control}
+                name="currentState"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-primary">
-                      Marital Status
+                      Current State
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
@@ -263,23 +249,26 @@ export default function InterviewSheetPage() {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select marital status" />
+                          <SelectValue placeholder="Select state" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Single">Single</SelectItem>
-                        <SelectItem value="Married">Married</SelectItem>
-                        <SelectItem value="MFS">
-                          MFS (Married Filing Separately)
-                        </SelectItem>
-                        <SelectItem value="HOH">
-                          HOH (Head of Household)
-                        </SelectItem>
-                        <SelectItem value="QSS">
-                          QSS (Qualified Joint Venture)
-                        </SelectItem>
+                        {states.map((item) => <SelectItem value={item.code} key={item.code}>{item.name}</SelectItem>)}
                       </SelectContent>
                     </Select>
+                    <FormMessage className="text-[13px]" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="zipCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-primary">ZIP Code</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormMessage className="text-[13px]" />
                   </FormItem>
                 )}
@@ -316,7 +305,6 @@ export default function InterviewSheetPage() {
                 )}
               />
             </div>
-
             <FormField
               control={form.control}
               name="occupation"
@@ -330,76 +318,6 @@ export default function InterviewSheetPage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="currentAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-primary">
-                    Current Address
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage className="text-[13px]" />
-                </FormItem>
-              )}
-            />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="currentCity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-primary">Current City</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[13px]" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="currentState"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-primary">
-                      Current State
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select state" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="CA">California</SelectItem>
-                        <SelectItem value="NY">New York</SelectItem>
-                        {/* Add more states here */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage className="text-[13px]" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="zipCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-primary">ZIP Code</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage className="text-[13px]" />
-                  </FormItem>
-                )}
-              />
-            </div>
           </CardContent>
         </Card>
 
@@ -452,58 +370,60 @@ export default function InterviewSheetPage() {
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="dependentRelation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-primary">Relation</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="dependentRelation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-primary">Relation</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select relation" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Son">Son</SelectItem>
+                        <SelectItem value="Daughter">Daughter</SelectItem>
+                        <SelectItem value="Parent">Parent</SelectItem>
+                        {/* Add more options as needed */}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="text-[13px]" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dependentDOB"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-primary">Date of Birth</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select relation" />
-                      </SelectTrigger>
+                      <Input type="date" {...field} />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Son">Son</SelectItem>
-                      <SelectItem value="Daughter">Daughter</SelectItem>
-                      <SelectItem value="Parent">Parent</SelectItem>
-                      {/* Add more options as needed */}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="text-[13px]" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dependentDOB"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-primary">Date of Birth</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage className="text-[13px]" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dependentSSN"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-primary">SSN</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage className="text-[13px]" />
-                </FormItem>
-              )}
-            />
+                    <FormMessage className="text-[13px]" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dependentSSN"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-primary">SSN</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage className="text-[13px]" />
+                  </FormItem>
+                )}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -533,9 +453,7 @@ export default function InterviewSheetPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="CA">California</SelectItem>
-                      <SelectItem value="NY">New York</SelectItem>
-                      {/* Add more states here */}
+                      {states.map((item) => <SelectItem value={item.code} key={item.code}>{item.name}</SelectItem>)}
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-[13px]" />

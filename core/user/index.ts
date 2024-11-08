@@ -85,3 +85,32 @@ export const login = async (input: z.infer<typeof loginSchema>) => {
   await createSession(userExist);
   redirect("/");
 };
+
+
+export const getPersonalDetails = async (userId: string) => {
+  const result = await db.select({
+    firstName: users.firstName,
+    middleName: users.middleName,
+    lastName: users.lastName,
+    email: users.email,
+    alternatePhoneNumber: users.alternatePhoneNumber,
+    employeeName: users.employeeName,
+  }).from(users).limit(1)
+  return result[0]
+}
+
+type personalDetialsUpdate = {
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  alternatePhoneNumber?: string;
+  employeeName?: string;
+}
+
+export const updatePersonalDetails = async (userId: string, updatedData: personalDetialsUpdate) => {
+  await db.update(users)
+    .set({ ...updatedData, id: userId })
+    .where(eq(users.id, userId))
+    .execute();
+};
