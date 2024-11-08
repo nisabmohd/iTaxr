@@ -11,7 +11,7 @@ const fontSans = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Taxpage - US",
+  title: "iTaxr - US",
   description: "US tax planning and preparation",
 };
 

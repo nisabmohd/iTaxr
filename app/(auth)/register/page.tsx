@@ -90,7 +90,7 @@ export default function RegisterPage() {
             className="mx-auto mb-4"
           />
           <h2 className="text-2xl font-semibold text-center text-gray-800">
-            Register to Taxpage
+            Register to iTaxr
           </h2>
           <p className="mb-6 mt-2 text-muted-foreground text-sm text-center">
             Enter details to register account

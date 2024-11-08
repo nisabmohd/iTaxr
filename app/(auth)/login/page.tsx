@@ -49,7 +49,7 @@ export default function LoginPage() {
             className="mx-auto mb-4"
           />
           <h2 className="text-2xl font-semibold text-center text-gray-800">
-            Login to Taxpage
+            Login to iTaxr
           </h2>
           <p className="mb-6 mt-2 text-muted-foreground text-sm text-center">
             Enter username and password to login
