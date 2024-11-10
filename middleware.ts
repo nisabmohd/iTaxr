@@ -10,6 +10,15 @@ export async function middleware(req: NextRequest) {
   if (!user && !auth_routes.includes(pathname)) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
+
+  if (user && user.role != "admin" && pathname.startsWith("/admin")){
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (user && user.role == "admin" && pathname.startsWith("/user")){
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
 }
 
 export const config = {

@@ -95,7 +95,7 @@ export const getPersonalDetails = async (userId: string) => {
     email: users.email,
     alternatePhoneNumber: users.alternatePhoneNumber,
     employeeName: users.employeeName,
-  }).from(users).limit(1)
+  }).from(users).where(eq(users.id, userId))
   return result[0]
 }
 
