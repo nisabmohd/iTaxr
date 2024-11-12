@@ -23,73 +23,15 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { states } from "@/lib/utils";
-
-const formSchema = z.object({
-  // Personal Information
-  maritalStatus: z.string(),
-  firstName: z
-    .string()
-    .min(2, { message: "First name must be at least 2 characters." }),
-  middleName: z.string().optional(),
-  lastName: z
-    .string()
-    .min(2, { message: "Last name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z
-    .string()
-    .min(10, { message: "Phone number must be at least 10 digits." }),
-  ssn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
-  dob: z.string(),
-  visaCategory: z.string(),
-  occupation: z.string(),
-  currentAddress: z.string(),
-  currentCity: z.string(),
-  currentState: z.string(),
-  zipCode: z.string(),
-
-  // Dependent Details
-  dependentFirstName: z.string().optional(),
-  dependentMiddleName: z.string().optional(),
-  dependentLastName: z.string().optional(),
-  dependentRelation: z.string().optional(),
-  dependentDOB: z.string().optional(),
-  dependentSSN: z.string().optional(),
-
-  // Residency Details
-  residencyState: z.string(),
-
-  // Source of Income
-  wages: z.string(),
-  businessIncome: z.string(),
-  rentalIncome: z.string(),
-  interestIncome: z.string(),
-  dividendIncome: z.string(),
-  capitalGains: z.string(),
-  retirementIncome: z.string(),
-
-  // Source of Deduction/Benefits
-  mortgageInterest: z.string(),
-  propertyTax: z.string(),
-  charitableDonations: z.string(),
-  medicalExpenses: z.string(),
-  studentLoanInterest: z.string(),
-  educationExpenses: z.string(),
-
-  // Other Disclosure
-  foreignBankAccounts: z.string(),
-  foreignAssets: z.string(),
-});
+import { interviewFormSchema } from "@/lib/definitions";
 
 export default function InterviewSheetPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof interviewFormSchema>>({
+    resolver: zodResolver(interviewFormSchema),
     defaultValues: {
-      maritalStatus: "",
       firstName: "",
       middleName: "",
       lastName: "",
-      email: "",
-      phone: "",
       ssn: "",
       dob: "",
       visaCategory: "",
@@ -98,32 +40,44 @@ export default function InterviewSheetPage() {
       currentCity: "",
       currentState: "",
       zipCode: "",
-      dependentFirstName: "",
+      dependentFirstName: "",  // => array object refer schema
       dependentMiddleName: "",
       dependentLastName: "",
       dependentRelation: "",
       dependentDOB: "",
       dependentSSN: "",
-      residencyState: "",
-      wages: "",
-      businessIncome: "",
-      rentalIncome: "",
-      interestIncome: "",
-      dividendIncome: "",
-      capitalGains: "",
-      retirementIncome: "",
-      mortgageInterest: "",
-      propertyTax: "",
-      charitableDonations: "",
-      medicalExpenses: "",
-      studentLoanInterest: "",
-      educationExpenses: "",
-      foreignBankAccounts: "",
-      foreignAssets: "",
+      residencyState: "", //string array
+      wages: 0,
+      //wagesFile
+      businessIncome: false,
+      //File
+      rentalIncome: false,
+      //File
+      interestIncome: false,
+      //File
+      dividendIncome: false,
+      //File
+      retirePlanIncome: false,
+      //File
+      mortgageInterest: false,
+      //File
+      propertyTax: false,
+      //File
+      charitableDonations: false,
+      //File
+      medicalExpenses: false,
+      //File
+      studentLoanInterest: false,
+      //File
+      educationExpenses: false,
+      //File
+      fbar: false,
+      //File
+      fatca_pfic: false,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof interviewFormSchema>) {
     console.log(values);
     toast({
       title: "Form submitted",

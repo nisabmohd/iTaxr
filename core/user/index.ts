@@ -1,4 +1,4 @@
-import { users } from "./user.sql";
+import { ResidencyStates, userDependentDetails, userInterviewDetails, users, userSourceIncome_Deductions } from "./user.sql";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { eq } from "drizzle-orm";
@@ -6,32 +6,7 @@ import bcrypt from "bcrypt";
 import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { hashPassword, id } from "@/lib/sql";
-
-export const userRegistrationSchema = z.object({
-  firstName: z.string(),
-  middleName: z.string().optional(),
-  lastName: z.string(),
-  email: z.string().email("Invalid email format"),
-  phoneNumber: z
-    .string()
-    .min(10, "Phone number must be at least 10 digits")
-    .max(20, "Phone number must be 20 digits or fewer")
-    .regex(/^[0-9]+$/, "Phone number should contain only digits"),
-  officeNumber: z
-    .string()
-    .min(10, "Office number must be at least 10 digits")
-    .max(20, "Office number must be 20 digits or fewer")
-    .regex(/^[0-9]+$/, "Office number should contain only digits")
-    .optional(),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(255, "Password must be 255 characters or fewer")
-    .regex(
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character"
-    ),
-});
+import { interviewFormSchema, loginSchema, userRegistrationSchema } from "@/lib/definitions";
 
 export const register = async (
   input: z.infer<typeof userRegistrationSchema>
@@ -46,7 +21,7 @@ export const register = async (
     phoneNumber: input.phoneNumber,
     officeNumber: input.officeNumber,
     password: await hashPassword(input.password),
-  });
+  }).execute()
   const user = await db
     .select()
     .from(users)
@@ -56,11 +31,6 @@ export const register = async (
   await createSession(user[0]);
   redirect("/");
 };
-
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
 
 export type User = typeof users.$inferSelect;
 
@@ -114,3 +84,89 @@ export const updatePersonalDetails = async (userId: string, updatedData: persona
     .where(eq(users.id, userId))
     .execute();
 };
+
+const interviewSchema = interviewFormSchema.extend({
+  id: z.string()
+})
+
+export const submitInterviewSheet = async (i: z.infer<typeof interviewSchema>) => {
+
+  const residencyStates: ResidencyStates = { states: i.residencyStates }
+  const dependentInsert: any = i.dependentDetails.map(dependent => ({
+    userId: i.id,
+    firstName: dependent.firstName,
+    middleName: dependent.middleName,
+    lastName: dependent.lastName,
+    relation: dependent.relation,
+    dob: dependent.dob,
+    ssn_or_itin: dependent.ssn,
+  }))
+
+  const call1 = db.insert(userInterviewDetails).values({
+    userId: i.id,
+    firstName: i.firstName,
+    middleName: i.middleName,
+    lastName: i.lastName,
+    ssn_or_itin: i.ssn,
+    currentAddress: i.currentAddress,
+    currentCity: i.currentCity,
+    currentState: i.currentState,
+    visaCategory: i.visaCategory,
+    occupation: i.occupation,
+    residencyStates: residencyStates,
+  }).execute()
+
+
+
+  const call2 = db.insert(userDependentDetails).values(dependentInsert).execute()
+  const call3 = db.insert(userSourceIncome_Deductions).values({
+    userId: i.id,
+
+    wages: i.wages,
+    wagesFile: i.wagesFile,
+
+    businessIncome: i.businessIncome,
+    businessIncomeFile: i.businessIncomeFile,
+
+    rentalIncome: i.rentalIncome,
+    rentalIncomeFile: i.rentalIncomeFile,
+
+    interestIncome: i.interestIncome,
+    interestIncomeFile: i.interestIncomeFile,
+
+    dividendIncome: i.dividendIncome,
+    dividendIncomeFile: i.dividendIncomeFile,
+
+    saleOfStock_CryptoIncome: i.saleOfStock_CryptoIncome,
+    saleOfStock_CryptoIncomeFile: i.saleOfStock_CryptoIncomeFile,
+
+    retirePlanIncome: i.retirePlanIncome,
+    retirePlanIncomeFile: i.retirePlanIncomeFile,
+
+    mortgageInterest: i.mortgageInterest,
+    mortgageInterestFile: i.mortgageInterestFile,
+
+    propertyTax: i.propertyTax,
+    propertyTaxFile: i.propertyTaxFile,
+
+    charitableDonations: i.charitableDonations,
+    charitableDonationsFile: i.charitableDonationsFile,
+
+    medicalExpenses: i.medicalExpenses,
+    medicalExpensesFile: i.medicalExpensesFile,
+
+    studentLoanInterest: i.studentLoanInterest,
+    studentLoanInterestFile: i.studentLoanInterestFile,
+
+    educationExpenses: i.educationExpenses,
+    educationExpensesFile: i.educationExpensesFile,
+
+    fbar: i.fbar,
+    fbarFile: i.fbarFile,
+
+    fatca_pfic: i.fatca_pfic,
+    fatca_pfic_File: i.fatca_pfic_File,
+  }).execute()
+
+  await Promise.all([call1, call2, call3])
+}
