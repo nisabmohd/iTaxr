@@ -1,7 +1,7 @@
+import { ResidencyStates } from "@/lib/definitions";
 import { timestamps } from "@/lib/sql";
 import { relations } from "drizzle-orm";
 import { mysqlTable, varchar, boolean, char, index, uniqueIndex, serial, date, json, int, text } from "drizzle-orm/mysql-core";
-import { string } from "zod";
 
 export const users = mysqlTable("users", {
   id: char("id", { length: 10 }).primaryKey(),
@@ -26,55 +26,51 @@ export const users = mysqlTable("users", {
   }
 });
 
-export type ResidencyStates = {
-  states: string[]
-}
-
 export const userInterviewDetails = mysqlTable("userInterviewDetails", {
-  id: serial("id").primaryKey(),
-  userId: char("user_id").notNull().references(() => users.id),
-  firstName: varchar("first_name", { length: 100 }).notNull(),
+  id: int("id").autoincrement().primaryKey(),
+  userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
+  firstName: varchar("first_name", { length: 100 }),
   middleName: varchar("middle_name", { length: 100 }).notNull(),
-  lastName: varchar("last_name", { length: 100 }).notNull(),
-  ssn_or_itin: varchar("ssn_or_itin", { length: 20 }).notNull(),
-  currentAddress: varchar("current_address", { length: 255 }).notNull(),
-  currentCity: varchar("current_city", { length: 100 }).notNull(),
-  currentState: varchar("current_state", { length: 30 }).notNull(),
+  lastName: varchar("last_name", { length: 100 }),
+  ssn_or_itin: varchar("ssn_or_itin", { length: 20 }),
+  currentAddress: varchar("current_address", { length: 255 }),
+  currentCity: varchar("current_city", { length: 100 }),
+  currentState: varchar("current_state", { length: 30 }),
   visaCategory: varchar("visa_category", { length: 50 }).notNull(),
-  occupation: varchar("occupation", { length: 100 }).notNull(),
+  occupation: varchar("occupation", { length: 100 }),
   residencyStates: json().$type<ResidencyStates>()
 })
 
 export const userDependentDetails = mysqlTable("userDependentDetails", {
-  id: serial("id").primaryKey(),
-  userId: char("user_id").notNull().references(() => users.id),
-  firstName: varchar("first_name", { length: 100 }).notNull(),
-  middleName: varchar("middle_name", { length: 100 }).notNull(),
-  lastName: varchar("last_name", { length: 100 }).notNull(),
-  relation: varchar("relation", { length: 50 }).notNull(),
-  dob: date("dob").notNull(),
-  ssn_or_itin: varchar("ssn_or_itin", { length: 20 }).notNull(),
+  id: int("id").autoincrement().primaryKey(),
+  userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
+  firstName: varchar("first_name", { length: 100 }),
+  middleName: varchar("middle_name", { length: 100 }),
+  lastName: varchar("last_name", { length: 100 }),
+  relation: varchar("relation", { length: 50 }),
+  dob: date("dob"),
+  ssn_or_itin: varchar("ssn_or_itin", { length: 20 })
 })
 
 export const userPreTaxDocs = mysqlTable("userPreTaxDocs", {
-  id: serial("id").primaryKey(),
-  userId: char("user_id").notNull().references(() => users.id),
+  id: int("id").autoincrement().primaryKey(),
+  userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
   documentType: varchar("document_type", { length: 100 }),
   documentTypeFile: text("document_file"),
-  documentRemarks: text("document_file_remarks"),
+  documentRemarks: text("document_file_remarks")
 })
 
 export const userPostTaxDocs = mysqlTable("userPostTaxDocs", {
-  id: serial("id").primaryKey(),
-  userId: char("user_id").notNull().references(() => users.id),
+  id: int("id").autoincrement().primaryKey(),
+  userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
   documentType: varchar("document_type", { length: 100 }),
   documentTypeFile: text("document_file"),
   documentRemarks: text("document_file_remarks"),
 })
 
 export const userSourceIncome_Deductions = mysqlTable("userSourceIncome_Deductions", {
-  id: serial("id").primaryKey(),
-  userId: char("user_id").notNull().references(() => users.id),
+  id: int("id").autoincrement().primaryKey(),
+  userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
   wages: int("wages"),
   wagesFile: text("wages_file"),
   businessIncome: boolean("business_income"),
@@ -154,3 +150,5 @@ export const sourceIncomeUserRelation = relations(userSourceIncome_Deductions, (
     references: [users.id]
   })
 }))
+export type { ResidencyStates };
+

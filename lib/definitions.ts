@@ -15,6 +15,15 @@ const fileSchema = z.any()
   .refine((file: File) => file?.size > MAX_FILE_SIZE, 'File should be less than 2 mb')
   .refine((file) => checkFile(file), "Only .pdf, .docx formats are supported.")
 
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .max(255, "Password must be 255 characters or fewer")
+  .regex(
+    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character"
+  )
+
 export const interviewFormSchema = z.object({
   firstName: z
     .string()
@@ -105,17 +114,25 @@ export const userRegistrationSchema = z.object({
     .max(20, "Office number must be 20 digits or fewer")
     .regex(/^[0-9]+$/, "Office number should contain only digits")
     .optional(),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(255, "Password must be 255 characters or fewer")
-    .regex(
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character"
-    ),
+  password: passwordSchema,
 });
 
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
+
+export const prePostTaxDocsSchema = z.object({
+  documentType: z.string(),
+  documentTypeFile: fileSchema,
+  documentRemarks: z.string().optional()
+})
+
+export const changePasswordSchema = z.object({
+  currentPass: passwordSchema,
+  newPass: passwordSchema
+})
+
+export type ResidencyStates = {
+  states: string[]
+}
