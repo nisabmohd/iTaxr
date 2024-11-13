@@ -1,4 +1,4 @@
-import { ResidencyStates, userDependentDetails, userInterviewDetails, users, userSourceIncome_Deductions } from "./user.sql";
+import { ResidencyStates, userDependentDetails, userInterviewDetails, userPostTaxDocs, userPreTaxDocs, users, userSourceIncome_Deductions } from "./user.sql";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { eq } from "drizzle-orm";
@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { hashPassword, id } from "@/lib/sql";
-import { interviewFormSchema, loginSchema, userRegistrationSchema } from "@/lib/definitions";
+import { changePasswordSchema, interviewFormSchema, loginSchema, prePostTaxDocsSchema, userRegistrationSchema } from "@/lib/definitions";
 
 export const register = async (
   input: z.infer<typeof userRegistrationSchema>
@@ -35,24 +35,24 @@ export const register = async (
 export type User = typeof users.$inferSelect;
 
 export const login = async (input: z.infer<typeof loginSchema>) => {
-  const user = await db
+  const userRes = await db
     .select()
     .from(users)
     .where(eq(users.email, input.email))
     .limit(1)
     .execute();
-  if (user.length === 0) {
+  if (userRes.length === 0) {
     throw new Error("User not found");
   }
-  const userExist = user[0];
+  const user = userRes[0];
   const isPasswordValid = await bcrypt.compare(
     input.password,
-    userExist.password
+    user.password
   );
   if (!isPasswordValid) {
     throw new Error("Invalid password");
   }
-  await createSession(userExist);
+  await createSession(user);
   redirect("/");
 };
 
@@ -116,9 +116,8 @@ export const submitInterviewSheet = async (i: z.infer<typeof interviewSchema>) =
     residencyStates: residencyStates,
   }).execute()
 
-
-
   const call2 = db.insert(userDependentDetails).values(dependentInsert).execute()
+
   const call3 = db.insert(userSourceIncome_Deductions).values({
     userId: i.id,
 
@@ -169,4 +168,48 @@ export const submitInterviewSheet = async (i: z.infer<typeof interviewSchema>) =
   }).execute()
 
   await Promise.all([call1, call2, call3])
+}
+
+const prePostDocsSchema = prePostTaxDocsSchema.extend({
+  id: z.string()
+})
+
+export const submitPreTaxDocs = async (i: z.infer<typeof prePostDocsSchema>) => {
+  return await db.insert(userPreTaxDocs).values({
+    userId: i.id,
+    documentType: i.documentType,
+    documentTypeFile: i.documentTypeFile,
+    documentRemarks: i.documentRemarks,
+  }).execute()
+}
+
+export const submitPostTaxDocs = async (i: z.infer<typeof prePostDocsSchema>) => {
+  return await db.insert(userPostTaxDocs).values({
+    userId: i.id,
+    documentType: i.documentType,
+    documentTypeFile: i.documentTypeFile,
+    documentRemarks: i.documentRemarks,
+  }).execute()
+}
+
+const changePassSchema = changePasswordSchema.extend({
+  id: z.string()
+
+})
+
+export const changePassword = async (i: z.infer<typeof changePassSchema>) => {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, i.id)
+  })
+  if (!user) {
+    throw Error("invalid password")
+  }
+  const validPass = await bcrypt.compare(i.currentPass, user.password)
+  if (!validPass) {
+    throw Error("invalid password")
+  }
+  await db.update(users)
+    .set({ password: await hashPassword(i.newPass) })
+    .where(eq(users.id, i.id))
+    .execute()
 }

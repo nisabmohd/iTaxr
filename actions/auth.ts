@@ -1,6 +1,7 @@
 "use server"
 
-import { login, loginSchema, register, userRegistrationSchema } from "@/core/user"
+import { login, register, } from "@/core/user"
+import { userRegistrationSchema, loginSchema } from '../lib/definitions'
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { z } from "zod"
