@@ -3,7 +3,7 @@
 import { loginAction } from "@/actions/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -25,6 +28,9 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -33,8 +39,19 @@ export default function LoginPage() {
     },
   });
 
-  async function onSubmit(data: LoginFormValues) {
-    await loginAction(data);
+  function onSubmit(data: LoginFormValues) {
+    startTransition(async () => {
+      const res = await loginAction(data);
+      if (!res.success) {
+        toast({
+          title: "Failed to login",
+          description: res.message,
+          variant: "destructive",
+        });
+        return;
+      }
+      router.push("/");
+    });
   }
 
   return (
@@ -106,10 +123,14 @@ export default function LoginPage() {
                 )}
               />
               <Button
+                disabled={isPending}
                 type="submit"
                 size="lg"
                 className="w-full !mt-5 bg-blue-500 hover:bg-blue-600"
               >
+                {isPending && (
+                  <Loader2Icon className="w-4 h-4 animate-spin mr-2" />
+                )}
                 Login
               </Button>
             </form>

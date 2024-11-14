@@ -3,7 +3,7 @@
 import { registerAction } from "@/actions/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { User, Mail, Phone, Building, Lock } from "lucide-react";
+import { User, Mail, Phone, Building, Lock, Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 const userRegistrationSchema = z
   .object({
@@ -60,6 +63,10 @@ const userRegistrationSchema = z
 type RegistrationFormValues = z.infer<typeof userRegistrationSchema>;
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(userRegistrationSchema),
     defaultValues: {
@@ -74,8 +81,20 @@ export default function RegisterPage() {
     },
   });
 
-  async function onSubmit(data: RegistrationFormValues) {
-    await registerAction(data);
+  function onSubmit(data: RegistrationFormValues) {
+    startTransition(async () => {
+      const res = await registerAction(data);
+      if (!res.success) {
+        toast({
+          title: "Failed to refister",
+          description: res.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      router.push("/");
+    });
   }
 
   return (
@@ -286,10 +305,14 @@ export default function RegisterPage() {
                 )}
               />
               <Button
+                disabled={isPending}
                 type="submit"
                 size="lg"
                 className="w-full bg-blue-500 hover:bg-blue-600"
               >
+                {isPending && (
+                  <Loader2Icon className="w-4 h-4 animate-spin mr-2" />
+                )}
                 Register
               </Button>
             </form>

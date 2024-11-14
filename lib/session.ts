@@ -1,6 +1,4 @@
-import "server-only";
-
-import { SignJWT, jwtVerify } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { User } from "@/core/user";
 

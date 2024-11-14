@@ -23,15 +23,73 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { states } from "@/lib/utils";
-import { interviewFormSchema } from "@/lib/definitions";
+
+const formSchema = z.object({
+  // Personal Information
+  maritalStatus: z.string(),
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
+  middleName: z.string().optional(),
+  lastName: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  phone: z
+    .string()
+    .min(10, { message: "Phone number must be at least 10 digits." }),
+  ssn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
+  dob: z.string(),
+  visaCategory: z.string(),
+  occupation: z.string(),
+  currentAddress: z.string(),
+  currentCity: z.string(),
+  currentState: z.string(),
+  zipCode: z.string(),
+
+  // Dependent Details -array
+  dependentFirstName: z.string().optional(),
+  dependentMiddleName: z.string().optional(),
+  dependentLastName: z.string().optional(),
+  dependentRelation: z.string().optional(),
+  dependentDOB: z.string().optional(),
+  dependentSSN: z.string().optional(),
+
+  // Residency Details
+  residencyState: z.string(),
+
+  // Source of Income
+  wages: z.string(),
+  businessIncome: z.string(),
+  rentalIncome: z.string(),
+  interestIncome: z.string(),
+  dividendIncome: z.string(),
+  capitalGains: z.string(),
+  retirementIncome: z.string(),
+
+  // Source of Deduction/Benefits
+  mortgageInterest: z.string(),
+  propertyTax: z.string(),
+  charitableDonations: z.string(),
+  medicalExpenses: z.string(),
+  studentLoanInterest: z.string(),
+  educationExpenses: z.string(),
+
+  // Other Disclosure
+  foreignBankAccounts: z.string(),
+  foreignAssets: z.string(),
+});
 
 export default function InterviewSheetPage() {
-  const form = useForm<z.infer<typeof interviewFormSchema>>({
-    resolver: zodResolver(interviewFormSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
+      maritalStatus: "",
       firstName: "",
       middleName: "",
       lastName: "",
+      email: "",
+      phone: "",
       ssn: "",
       dob: "",
       visaCategory: "",
@@ -40,44 +98,32 @@ export default function InterviewSheetPage() {
       currentCity: "",
       currentState: "",
       zipCode: "",
-      dependentFirstName: "",  // => array object refer schema
+      dependentFirstName: "",
       dependentMiddleName: "",
       dependentLastName: "",
       dependentRelation: "",
       dependentDOB: "",
       dependentSSN: "",
-      residencyState: "", //string array
-      wages: 0,
-      //wagesFile
-      businessIncome: false,
-      //File
-      rentalIncome: false,
-      //File
-      interestIncome: false,
-      //File
-      dividendIncome: false,
-      //File
-      retirePlanIncome: false,
-      //File
-      mortgageInterest: false,
-      //File
-      propertyTax: false,
-      //File
-      charitableDonations: false,
-      //File
-      medicalExpenses: false,
-      //File
-      studentLoanInterest: false,
-      //File
-      educationExpenses: false,
-      //File
-      fbar: false,
-      //File
-      fatca_pfic: false,
+      residencyState: "",
+      wages: "",
+      businessIncome: "",
+      rentalIncome: "",
+      interestIncome: "",
+      dividendIncome: "",
+      capitalGains: "",
+      retirementIncome: "",
+      mortgageInterest: "",
+      propertyTax: "",
+      charitableDonations: "",
+      medicalExpenses: "",
+      studentLoanInterest: "",
+      educationExpenses: "",
+      foreignBankAccounts: "",
+      foreignAssets: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof interviewFormSchema>) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     toast({
       title: "Form submitted",
@@ -103,7 +149,8 @@ export default function InterviewSheetPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-primary">
-                      First Name as per SSN <span className="text-red-500 ml-1">*</span>
+                      First Name as per SSN{" "}
+                      <span className="text-red-500 ml-1">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -117,7 +164,9 @@ export default function InterviewSheetPage() {
                 name="middleName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-primary">Middle Name as per SSN</FormLabel>
+                    <FormLabel className="text-primary">
+                      Middle Name as per SSN
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -131,7 +180,8 @@ export default function InterviewSheetPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-primary">
-                      Last Name as per SSN<span className="text-red-500 ml-1">*</span>
+                      Last Name as per SSN
+                      <span className="text-red-500 ml-1">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -142,7 +192,6 @@ export default function InterviewSheetPage() {
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
               <FormField
                 control={form.control}
                 name="ssn"
@@ -188,7 +237,6 @@ export default function InterviewSheetPage() {
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
               <FormField
                 control={form.control}
                 name="currentState"
@@ -207,7 +255,11 @@ export default function InterviewSheetPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {states.map((item) => <SelectItem value={item.code} key={item.code}>{item.name}</SelectItem>)}
+                        {states.map((item) => (
+                          <SelectItem value={item.code} key={item.code}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage className="text-[13px]" />
@@ -356,7 +408,9 @@ export default function InterviewSheetPage() {
                 name="dependentDOB"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-primary">Date of Birth</FormLabel>
+                    <FormLabel className="text-primary">
+                      Date of Birth
+                    </FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -407,7 +461,11 @@ export default function InterviewSheetPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {states.map((item) => <SelectItem value={item.code} key={item.code}>{item.name}</SelectItem>)}
+                      {states.map((item) => (
+                        <SelectItem value={item.code} key={item.code}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-[13px]" />

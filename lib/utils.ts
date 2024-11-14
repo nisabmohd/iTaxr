@@ -1,10 +1,8 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
 
 export const states = [
   { code: "AL", name: "Alabama" },
@@ -56,5 +54,5 @@ export const states = [
   { code: "WA", name: "Washington" },
   { code: "WV", name: "West Virginia" },
   { code: "WI", name: "Wisconsin" },
-  { code: "WY", name: "Wyoming" }
+  { code: "WY", name: "Wyoming" },
 ];
