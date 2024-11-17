@@ -8,7 +8,7 @@ type Schema = typeof schema;
 
 const config: MySql2DrizzleConfig<Schema> = {
   schema: schema,
-  logger: true,
+  logger: false,
   mode: "default",
 };
 export const db = drizzle(poolConnection, config);
