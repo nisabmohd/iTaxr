@@ -7,8 +7,8 @@ import { getSession } from "@/lib/session";
 import { getPersonalDetails } from "@/core/user";
 
 export default async function Navbar() {
-  const session = (await getSession())!
-  const { firstName, middleName } = await getPersonalDetails(session.id)
+  const session = (await getSession())!;
+  const { firstName, middleName } = await getPersonalDetails(session.id);
 
   return (
     <nav className="h-14 border-b sticky top-0 bg-background z-30">

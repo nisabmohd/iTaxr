@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   BanknoteIcon,
@@ -13,9 +13,14 @@ import {
   SquarePenIcon,
   UserIcon,
   UserXIcon,
-  ChevronDown, ChevronRight
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import Anchor from "./anchor";
 import { useState } from "react";
 
@@ -40,13 +45,15 @@ export function UserLeftbar() {
 }
 
 export function AdminLeftbar() {
-  const [openItems, setOpenItems] = useState<string[]>([])
+  const [openItems, setOpenItems] = useState<string[]>([]);
 
   const toggleItem = (title: string) => {
     setOpenItems((prev) =>
-      prev.includes(title) ? prev.filter((item) => item !== title) : [...prev, title]
-    )
-  }
+      prev.includes(title)
+        ? prev.filter((item) => item !== title)
+        : [...prev, title]
+    );
+  };
 
   return (
     <aside className="h-full flex-[2] border-r sticky top-14 px-2 py-7">
@@ -54,7 +61,10 @@ export function AdminLeftbar() {
         {admin_links.map((link) => (
           <div key={link.href}>
             {link.subItems ? (
-              <Collapsible open={openItems.includes(link.title)} onOpenChange={() => toggleItem(link.title)}>
+              <Collapsible
+                open={openItems.includes(link.title)}
+                onOpenChange={() => toggleItem(link.title)}
+              >
                 <CollapsibleTrigger asChild>
                   <button className="w-full text-sm p-3 flex items-center gap-2.5 hover:bg-secondary rounded-md">
                     <link.icon className="w-5 h-5 text-current" />
@@ -95,7 +105,7 @@ export function AdminLeftbar() {
         ))}
       </div>
     </aside>
-  )
+  );
 }
 
 const user_links = [
@@ -158,7 +168,7 @@ const admin_links = [
         title: "Pre Cancelled",
         href: "/admin/pre-process/pre-cancelled",
       },
-    ]
+    ],
   },
   {
     title: "Process",
@@ -185,7 +195,7 @@ const admin_links = [
         title: "Post Cancelled",
         href: "/admin/process/post-cancelled",
       },
-    ]
+    ],
   },
   {
     title: "Post Process",
@@ -220,7 +230,7 @@ const admin_links = [
         title: "Cancelled",
         href: "/admin/post-process/cancelled",
       },
-    ]
+    ],
   },
   {
     title: "Notifications",

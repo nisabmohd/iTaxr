@@ -22,6 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
+import { preTaxFormAction } from "@/actions/user-forms";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { clientFileInputSchema, fileToBase64 } from "@/lib/utils";
 
 const documentTypes = [
   { value: "invoice", label: "Invoice" },
@@ -34,21 +38,41 @@ const FormSchema = z.object({
   documentType: z.string({
     required_error: "Please select a document type.",
   }),
-  file: z.instanceof(File, { message: "Please select a file." }),
+  file: clientFileInputSchema,
   remarks: z.string().optional(),
 });
 
 export default function PreTaxDocuments() {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    const { file, documentType, remarks } = data;
+    startTransition(async () => {
+      const base64File = await fileToBase64(file);
+      const resp = await preTaxFormAction({
+        documentType,
+        documentRemarks: remarks,
+        documentTypeFile: base64File,
+      });
 
-    toast({
-      title: "Document uploaded",
-      description: `Uploaded ${data.file.name} as ${data.documentType}`,
+      if (resp.success) {
+        toast({
+          title: "Document uploaded",
+          description: `Uploaded ${data.file.name} as ${data.documentType}`,
+          variant: "success",
+        });
+        router.refresh();
+      } else {
+        toast({
+          title: "Document update failed",
+          description: resp.message,
+          variant: "destructive",
+        });
+      }
     });
   }
 
@@ -129,6 +153,7 @@ export default function PreTaxDocuments() {
           )}
         />
         <Button
+          disabled={isPending}
           type="submit"
           size="lg"
           className="w-fit bg-blue-500 hover:bg-blue-600 !mt-7"

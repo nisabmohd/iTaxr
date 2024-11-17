@@ -15,6 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { UserDetails } from "./page";
+import { personalInfoUpdateAction } from "@/actions/user-forms";
+import { useTransition } from "react";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -27,16 +29,16 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  phone: z.string().min(10, {
+  phoneNumber: z.string().min(10, {
     message: "Phone number must be at least 10 digits.",
   }),
-  alternatePhone: z
+  alternatePhoneNumber: z
     .string()
     .min(10, {
       message: "Alternate phone number must be at least 10 digits.",
     })
     .optional(),
-  empName: z.string().min(2, {
+  employeeName: z.string().min(2, {
     message: "Employee name must be at least 2 characters.",
   }),
 });
@@ -46,6 +48,7 @@ export default function PersonalInfoForm({
 }: {
   userDetails: UserDetails;
 }) {
+  const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,17 +56,29 @@ export default function PersonalInfoForm({
       middleName: userDetails.middleName ?? "",
       lastName: userDetails.lastName,
       email: userDetails.email,
-      phone: userDetails.phoneNumber,
-      alternatePhone: userDetails.alternatePhoneNumber ?? "",
-      empName: userDetails.employeeName ?? "",
+      phoneNumber: userDetails.phoneNumber,
+      alternatePhoneNumber: userDetails.alternatePhoneNumber ?? "",
+      employeeName: userDetails.employeeName ?? "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const { email, ...body } = values;
+    startTransition(async () => {
+      const resp = await personalInfoUpdateAction(body);
 
-    toast({
-      title: "Information updated",
+      if (resp.success) {
+        toast({
+          title: "Information updated for user " + email,
+          variant: "success",
+        });
+      } else {
+        toast({
+          title: "Information update failed",
+          description: resp.message,
+          variant: "destructive",
+        });
+      }
     });
   }
 
@@ -146,7 +161,7 @@ export default function PersonalInfoForm({
           />
           <FormField
             control={form.control}
-            name="phone"
+            name="phoneNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary">
@@ -162,7 +177,7 @@ export default function PersonalInfoForm({
           />
           <FormField
             control={form.control}
-            name="alternatePhone"
+            name="alternatePhoneNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary">Alternate Phone</FormLabel>
@@ -176,7 +191,7 @@ export default function PersonalInfoForm({
           />
           <FormField
             control={form.control}
-            name="empName"
+            name="employeeName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary">
@@ -192,6 +207,7 @@ export default function PersonalInfoForm({
           />
         </div>
         <Button
+          disabled={isPending}
           type="submit"
           className="w-fit bg-blue-500 hover:bg-blue-600"
           size="lg"

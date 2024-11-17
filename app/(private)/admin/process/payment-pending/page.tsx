@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -28,7 +27,12 @@ export default function Page() {
           <TableCell>nisabmohd@gmail.com</TableCell>
           <TableCell>636540543</TableCell>
           <TableCell className="text-right">
-            <Button size="sm" className="w-fit bg-blue-500 hover:bg-blue-600 m-0">View</Button>
+            <Button
+              size="sm"
+              className="w-fit bg-blue-500 hover:bg-blue-600 m-0"
+            >
+              View
+            </Button>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -37,7 +41,12 @@ export default function Page() {
           <TableCell>sohailali@gmail.com</TableCell>
           <TableCell>1367542578</TableCell>
           <TableCell className="text-right">
-            <Button size="sm" className="w-fit bg-blue-500 hover:bg-blue-600 m-0">View</Button>
+            <Button
+              size="sm"
+              className="w-fit bg-blue-500 hover:bg-blue-600 m-0"
+            >
+              View
+            </Button>
           </TableCell>
         </TableRow>
       </TableBody>

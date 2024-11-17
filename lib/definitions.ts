@@ -1,19 +1,7 @@
-import { z } from 'zod'
+import { z } from "zod";
 
-//max size is 2 mb
-const MAX_FILE_SIZE = 2000000;
-
-function checkFile(file: File) {
-  if (file?.name) {
-    const type = file.name.split(".").pop()
-    if (type === 'docx' || type === 'pdf') return true
-  }
-  return false
-}
-
-const fileSchema = z.any()
-  .refine((file: File) => file?.size > MAX_FILE_SIZE, 'File should be less than 2 mb')
-  .refine((file) => checkFile(file), "Only .pdf, .docx formats are supported.")
+// file stored in base64
+const fileSchema = z.string();
 
 const passwordSchema = z
   .string()
@@ -21,8 +9,8 @@ const passwordSchema = z
   .max(255, "Password must be 255 characters or fewer")
   .regex(
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character"
-  )
+    "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
+  );
 
 export const interviewFormSchema = z.object({
   firstName: z
@@ -75,7 +63,6 @@ export const interviewFormSchema = z.object({
   mortgageInterest: z.boolean(),
   mortgageInterestFile: fileSchema,
 
-
   propertyTax: z.boolean(),
   propertyTaxFile: fileSchema,
 
@@ -95,7 +82,7 @@ export const interviewFormSchema = z.object({
   fbarFile: fileSchema,
 
   fatca_pfic: z.boolean(),
-  fatca_pfic_File: fileSchema
+  fatca_pfic_File: fileSchema,
 });
 
 export const userRegistrationSchema = z.object({
@@ -125,14 +112,14 @@ export const loginSchema = z.object({
 export const prePostTaxDocsSchema = z.object({
   documentType: z.string(),
   documentTypeFile: fileSchema,
-  documentRemarks: z.string().optional()
-})
+  documentRemarks: z.string().optional(),
+});
 
 export const changePasswordSchema = z.object({
   currentPass: passwordSchema,
-  newPass: passwordSchema
-})
+  newPass: passwordSchema,
+});
 
 export type ResidencyStates = {
-  states: string[]
-}
+  states: string[];
+};

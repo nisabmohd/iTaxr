@@ -12,7 +12,6 @@ import { db } from "@/db/client";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { createSession } from "@/lib/session";
-import { redirect } from "next/navigation";
 import { hashPassword, id } from "@/lib/sql";
 import {
   changePasswordSchema,
@@ -66,7 +65,6 @@ export const login = async (input: z.infer<typeof loginSchema>) => {
     throw new Error("Invalid password");
   }
   await createSession(user);
-  redirect("/");
 };
 
 export const getPersonalDetails = async (userId: string) => {
@@ -192,14 +190,16 @@ export const submitInterviewSheet = async (
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const prePostDocsSchema = prePostTaxDocsSchema.extend({
-  id: z.string(),
+  userId: z.string(),
 });
 
+export type PrePostTaxPayload = z.infer<typeof prePostDocsSchema>;
+
 export const submitPreTaxDocs = async (
-  i: z.infer<typeof prePostDocsSchema>,
+  i: PrePostTaxPayload,
 ) => {
   return await db.insert(userPreTaxDocs).values({
-    userId: i.id,
+    userId: i.userId,
     documentType: i.documentType,
     documentTypeFile: i.documentTypeFile,
     documentRemarks: i.documentRemarks,
@@ -207,10 +207,10 @@ export const submitPreTaxDocs = async (
 };
 
 export const submitPostTaxDocs = async (
-  i: z.infer<typeof prePostDocsSchema>,
+  i: PrePostTaxPayload,
 ) => {
   return await db.insert(userPostTaxDocs).values({
-    userId: i.id,
+    userId: i.userId,
     documentType: i.documentType,
     documentTypeFile: i.documentTypeFile,
     documentRemarks: i.documentRemarks,
@@ -222,12 +222,14 @@ const changePassSchema = changePasswordSchema.extend({
   id: z.string(),
 });
 
-export const changePassword = async (i: z.infer<typeof changePassSchema>) => {
+export type ChangePasswordInput = z.infer<typeof changePassSchema>;
+
+export const changePassword = async (i: ChangePasswordInput) => {
   const user = await db.query.users.findFirst({
     where: eq(users.id, i.id),
   });
   if (!user) {
-    throw Error("invalid password");
+    throw Error("No user found");
   }
   const validPass = await bcrypt.compare(i.currentPass, user.password);
   if (!validPass) {

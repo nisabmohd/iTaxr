@@ -1,5 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -56,3 +58,29 @@ export const states = [
   { code: "WI", name: "Wisconsin" },
   { code: "WY", name: "Wyoming" },
 ];
+
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.split(",")[1]); // Exclude the "data:..." prefix
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+export const clientFileInputSchema = z
+  .instanceof(File, { message: "Please select a valid file." })
+  .refine(
+    (file) =>
+      [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ].includes(file.type),
+    { message: "Only PDF and DOCX files are allowed." },
+  )
+  .refine((file) => file.size <= 2 * 1024 * 1024, {
+    message: "File size must be less than 2MB.",
+  });

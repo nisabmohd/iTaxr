@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
+import { settingFormAction } from "@/actions/user-forms";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -33,6 +36,8 @@ const formSchema = z
   });
 
 export default function ChangePassword() {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,10 +48,26 @@ export default function ChangePassword() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const { oldPassword, newPassword } = values;
+    startTransition(async () => {
+      const resp = await settingFormAction({
+        currentPass: oldPassword,
+        newPass: newPassword,
+      });
 
-    toast({
-      title: "Password changed successfully",
+      if (resp.success) {
+        toast({
+          title: "Password changed successfully",
+          variant: "success",
+        });
+        router.refresh();
+      } else {
+        toast({
+          title: "Password update failed",
+          description: resp.message,
+          variant: "destructive",
+        });
+      }
     });
   }
 
@@ -123,6 +144,7 @@ export default function ChangePassword() {
           />
         </div>
         <Button
+          disabled={isPending}
           type="submit"
           className="w-fit bg-blue-500 hover:bg-blue-600"
           size="lg"
