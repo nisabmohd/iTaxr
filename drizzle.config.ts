@@ -2,7 +2,7 @@ import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
   strict: true,
-  verbose: true,
+  verbose: false,
   out: "./db/migration",
   dialect: "mysql",
   dbCredentials: {
