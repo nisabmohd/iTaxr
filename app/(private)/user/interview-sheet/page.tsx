@@ -14,8 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const clientFileInputSchema = z.any();
+import { clientFileInputSchema, states } from "@/lib/utils";
 
 const newformSchema = z.object({
   maritalStatus: z.string(),
@@ -51,7 +50,7 @@ const newformSchema = z.object({
   residencyStates: z.array(z.string()),
   wages: z.number().optional(),
   spouseWages: z.number().optional(),
-  wagesFile: clientFileInputSchema.optional(),
+  wagesFile: clientFileInputSchema,
   businessIncome: z.number().optional(),
   spouseBusinessIncome: z.number().optional(),
   businessIncomeFile: clientFileInputSchema.optional(),
@@ -531,9 +530,11 @@ export default function TaxForm() {
                   <SelectValue placeholder="Select state" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="AL">Alabama</SelectItem>
-                  <SelectItem value="AK">Alaska</SelectItem>
-                  {/* Add more states here */}
+                  {states.map((item) => (
+                    <SelectItem value={item.code} key={item.code}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             )}
