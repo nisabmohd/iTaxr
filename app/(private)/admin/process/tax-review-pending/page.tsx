@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export default function Page() {
+export default function TaxReviewPending() {
   return (
     <Table>
       <TableHeader>
