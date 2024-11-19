@@ -12,11 +12,11 @@ export async function middleware(req: NextRequest) {
   }
 
   if (user && user.role != "admin" && pathname.startsWith("/admin")) {
-    return NextResponse.redirect(new URL("/user/personal-info", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   if (user && user.role == "admin" && pathname.startsWith("/user")) {
-    return NextResponse.redirect(new URL("/admin/registration", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 }
 
