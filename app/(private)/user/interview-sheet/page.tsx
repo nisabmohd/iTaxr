@@ -17,37 +17,56 @@ import {
 import { clientFileInputSchema, states } from "@/lib/utils";
 
 const newformSchema = z.object({
-  maritalStatus: z.string(),
+  maritalStatus: z.string().min(1, { message: "Marital status is required." }),
   firstName: z
     .string()
-    .min(2, { message: "First name must be at least 2 characters." }),
+    .min(2, { message: "First name must be at least 2 characters." })
+    .nonempty({ message: "First name is required." }),
   middleName: z.string().optional(),
   lastName: z
     .string()
-    .min(2, { message: "Last name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
+    .min(2, { message: "Last name must be at least 2 characters." })
+    .nonempty({ message: "Last name is required." }),
+  email: z
+    .string()
+    .email({ message: "Please enter a valid email address." })
+    .nonempty({ message: "Email is required." }),
   phone: z
     .string()
-    .min(10, { message: "Phone number must be at least 10 digits." }),
-  ssn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
-  dob: z.string(),
-  visaCategory: z.string(),
-  occupation: z.string(),
-  currentAddress: z.string(),
-  currentCity: z.string(),
-  currentState: z.string(),
-  zipCode: z.string(),
+    .min(10, { message: "Phone number must be at least 10 digits." })
+    .nonempty({ message: "Phone number is required." }),
+  ssn: z
+    .string()
+    .min(9, { message: "SSN must be at least 9 characters." })
+    .nonempty({ message: "SSN is required." }),
+  dob: z.string().nonempty({ message: "Date of birth is required." }),
+  visaCategory: z.string().nonempty({ message: "Visa category is required." }),
+  occupation: z.string().nonempty({ message: "Occupation is required." }),
+  currentAddress: z
+    .string()
+    .nonempty({ message: "Current address is required." }),
+  currentCity: z.string().nonempty({ message: "Current city is required." }),
+  currentState: z.string().nonempty({ message: "Current state is required." }),
+  zipCode: z.string().nonempty({ message: "Zip code is required." }),
   dependentDetails: z.array(
     z.object({
-      firstName: z.string(),
+      firstName: z
+        .string()
+        .nonempty({ message: "Dependent first name is required." }),
       middleName: z.string().optional(),
-      lastName: z.string(),
-      relation: z.string(),
-      dob: z.string(),
-      ssn: z.string(),
+      lastName: z
+        .string()
+        .nonempty({ message: "Dependent last name is required." }),
+      relation: z.string().nonempty({ message: "Relation is required." }),
+      dob: z
+        .string()
+        .nonempty({ message: "Dependent date of birth is required." }),
+      ssn: z.string().nonempty({ message: "Dependent SSN is required." }),
     })
   ),
-  residencyStates: z.array(z.string()),
+  residencyStates: z
+    .array(z.string())
+    .nonempty({ message: "At least one residency state is required." }),
   wages: z.number().optional(),
   spouseWages: z.number().optional(),
   wagesFile: clientFileInputSchema,
