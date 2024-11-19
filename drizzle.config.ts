@@ -8,5 +8,5 @@ export default defineConfig({
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },
-  schema: "./core/**/*.sql.ts",
+  schema: "./core/**/*.ts",
 });

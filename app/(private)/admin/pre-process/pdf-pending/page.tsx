@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 
 export default function PdfPending() {
   return (
@@ -27,12 +28,15 @@ export default function PdfPending() {
           <TableCell>nisabmohd@gmail.com</TableCell>
           <TableCell>636540543</TableCell>
           <TableCell className="text-right">
-            <Button
-              size="sm"
-              className="w-fit bg-blue-500 hover:bg-blue-600 m-0"
+            <Link
+              href="/admin/view?fileId=240001"
+              className={buttonVariants({
+                size: "sm",
+                className: "w-fit bg-blue-500 hover:bg-blue-600 m-0",
+              })}
             >
               View
-            </Button>
+            </Link>
           </TableCell>
         </TableRow>
         <TableRow>
@@ -41,12 +45,15 @@ export default function PdfPending() {
           <TableCell>sohailali@gmail.com</TableCell>
           <TableCell>1367542578</TableCell>
           <TableCell className="text-right">
-            <Button
-              size="sm"
-              className="w-fit bg-blue-500 hover:bg-blue-600 m-0"
+            <Link
+              href="/admin/view?fileId=240001"
+              className={buttonVariants({
+                size: "sm",
+                className: "w-fit bg-blue-500 hover:bg-blue-600 m-0",
+              })}
             >
               View
-            </Button>
+            </Link>
           </TableCell>
         </TableRow>
       </TableBody>
