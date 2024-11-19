@@ -38,6 +38,6 @@ export async function registerAction(
 }
 
 export async function logoutAction() {
-  cookies().delete("session");
+  (await cookies()).delete("session");
   redirect("/login");
 }

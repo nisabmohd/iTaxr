@@ -40,7 +40,7 @@ export async function createSession(user: User) {
     role: user.role,
   };
   const session = await encrypt(sessionPayload);
-  cookies().set("session", session, {
+  (await cookies()).set("session", session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     path: "/",
@@ -49,7 +49,7 @@ export async function createSession(user: User) {
 }
 
 export async function getSession() {
-  const session = cookies().get("session")?.value;
+  const session = (await cookies()).get("session")?.value;
   if (!session) return undefined;
   return await decrypt(session);
 }

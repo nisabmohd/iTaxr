@@ -1,9 +1,9 @@
 type SerachPageParams = {
-  searchParams: {
+  searchParams: Promise<{
     query: string;
-  };
+  }>;
 };
 
-export default function SearchPage(params: SerachPageParams) {
-  return <div>search for {params.searchParams.query}</div>;
+export default async function SearchPage(params: SerachPageParams) {
+  return <div>search for {(await params.searchParams).query}</div>;
 }

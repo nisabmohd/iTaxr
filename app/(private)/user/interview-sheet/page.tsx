@@ -505,7 +505,6 @@ export default function TaxForm() {
                 className="w-fit"
                 variant="destructive"
                 size="sm"
-                type="button"
                 onClick={() => remove(index)}
               >
                 Remove
@@ -513,7 +512,6 @@ export default function TaxForm() {
             </div>
           ))}
           <Button
-            type="button"
             className="w-fit bg-blue-500 hover:bg-blue-600"
             onClick={() =>
               append({
