@@ -1,9 +1,9 @@
 const nextConfig = {
-  // experimental: {
-  //   serverActions: {
-  //     bodySizeLimit: "3mb",
-  //   },
-  // },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "3mb",
+    },
+  },
 };
 
 export default nextConfig;

@@ -1,8 +1,7 @@
 import { UserLeftbar } from "@/components/leftbar";
 import { PropsWithChildren } from "react";
 
-export default async function UserLayout({ children }: PropsWithChildren) {
-
+export default function UserLayout({ children }: PropsWithChildren) {
   return (
     <div className="flex items-start h-[94vh] relative">
       <UserLeftbar />

@@ -1,7 +1,7 @@
 import { AdminLeftbar } from "@/components/leftbar";
 import { PropsWithChildren } from "react";
 
-export default async function AdminLayout({ children }: PropsWithChildren) {
+export default function AdminLayout({ children }: PropsWithChildren) {
   return (
     <div className="flex items-start h-[94vh] relative">
       <AdminLeftbar />
