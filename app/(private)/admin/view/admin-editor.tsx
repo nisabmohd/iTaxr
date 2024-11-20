@@ -23,17 +23,27 @@ import {
 import { useState } from "react";
 
 // Mock data for states, users, and priorities
-const states = ["New", "In Progress", "Review", "Done"];
-const users = ["Alice", "Bob", "Charlie", "David"];
-const priorities = ["Low", "Medium", "High", "Urgent"];
+const states = [
+  "Interview Pending",
+  "Document Pending",
+  "Additional Doc Pending",
+  "Pre Cancelled",
+];
+const users = [
+  "alice@gmail.com",
+  "mohd@outlook.com",
+  "charlie@msn.org",
+  "david@outlook.in",
+];
 
 type FormData = {
   state: string;
   assignedTo: string;
   remarks: string;
-  priority: string;
   dueDate: string;
 };
+
+const currentState = "Interview Pending";
 
 export default function AdminPanelEditor() {
   const {
@@ -45,7 +55,6 @@ export default function AdminPanelEditor() {
       state: "",
       assignedTo: "",
       remarks: "",
-      priority: "",
       dueDate: "",
     },
   });
@@ -64,15 +73,20 @@ export default function AdminPanelEditor() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>Task Assignment</CardTitle>
+        <CardTitle className="text-xl">Employee Verification</CardTitle>
         <CardDescription>
-          Assign tasks to team members and update their status.
+          Verify the file and move to appropriate state.
         </CardDescription>
       </CardHeader>
+
       <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="state">State</Label>
+            <Label htmlFor="current">Current Stage</Label>
+            <Input id="current" readOnly value={currentState} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="state">Change Stage</Label>
             <Controller
               name="state"
               control={control}
@@ -134,38 +148,6 @@ export default function AdminPanelEditor() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="priority">Priority</Label>
-            <Controller
-              name="priority"
-              control={control}
-              rules={{ required: "Priority is required" }}
-              render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  aria-label="Select task priority"
-                >
-                  <SelectTrigger id="priority">
-                    <SelectValue placeholder="Select a priority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {priorities.map((p) => (
-                      <SelectItem key={p} value={p}>
-                        {p}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.priority && (
-              <p className="text-[13px] text-red-500">
-                {errors.priority.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="dueDate">Due Date</Label>
             <Controller
               name="dueDate"
@@ -198,6 +180,7 @@ export default function AdminPanelEditor() {
                   id="remarks"
                   placeholder="Enter any additional remarks..."
                   {...field}
+                  rows={7}
                 />
               )}
             />

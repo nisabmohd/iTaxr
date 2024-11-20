@@ -33,6 +33,10 @@ const PersonalInfoTab = () => (
         <Label htmlFor="address">Address</Label>
         <Input id="address" value="123 Main St, Anytown, USA" readOnly />
       </div>
+
+      <p className="text-muted-foreground text-sm">
+        Work in progress ... Rest all details will come here
+      </p>
     </CardContent>
   </Card>
 );
@@ -41,25 +45,30 @@ const InterviewSheetTab = () => (
   <Card>
     <CardHeader>
       <CardTitle>Interview Sheet</CardTitle>
-      <CardDescription>View your interview details</CardDescription>
+      <CardDescription>View user interview sheet details</CardDescription>
     </CardHeader>
     <CardContent className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="position">Position Applied</Label>
-        <Input id="position" value="Software Developer" readOnly />
+        <Label htmlFor="position">First Name as per SSN</Label>
+        <Input id="position" value="Nisab" readOnly />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="date">Last Name as per SSN</Label>
+        <Input id="date" value="Mohammad" readOnly />
       </div>
       <div className="space-y-2">
         <Label htmlFor="interviewer">Interviewer</Label>
         <Input id="interviewer" value="Jane Smith" readOnly />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="date">Interview Date</Label>
-        <Input id="date" value="2023-06-15" readOnly />
-      </div>
+
       <div className="space-y-2">
         <Label htmlFor="status">Status</Label>
         <Input id="status" value="Completed" readOnly />
       </div>
+
+      <p className="text-muted-foreground text-sm">
+        Work in progress ... Rest all details will come here
+      </p>
     </CardContent>
   </Card>
 );

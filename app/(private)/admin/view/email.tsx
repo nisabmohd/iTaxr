@@ -20,13 +20,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
 const EmailTab = () => {
-  const [template, setTemplate] = useState("");
+  const [template, setTemplate] = useState<EmailTemplateValue | undefined>();
   const [emailContent, setEmailContent] = useState("");
 
-  const handleTemplateChange = (value: string) => {
+  const handleTemplateChange = (value: EmailTemplateValue) => {
     setTemplate(value);
-    // In a real application, you would fetch the template content here
-    setEmailContent(`This is the content for the ${value} template.`);
+    const temp = email_templates.find((tp) => tp.name == value)!;
+    setEmailContent(temp.content);
   };
 
   const handleSend = () => {
@@ -48,9 +48,11 @@ const EmailTab = () => {
               <SelectValue placeholder="Select a template" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="welcome">Welcome Email</SelectItem>
-              <SelectItem value="followup">Follow-up Email</SelectItem>
-              <SelectItem value="offer">Job Offer Email</SelectItem>
+              {email_templates.map((template) => (
+                <SelectItem key={template.name} value={template.name}>
+                  {template.title}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -61,6 +63,7 @@ const EmailTab = () => {
             value={emailContent}
             onChange={(e) => setEmailContent(e.target.value)}
             className="min-h-[200px]"
+            rows={15}
           />
         </div>
         <Button
@@ -74,5 +77,38 @@ const EmailTab = () => {
     </Card>
   );
 };
+
+const email_templates = [
+  {
+    name: "welcome",
+    title: "Welcome Email",
+    content: `Subject: Welcome to Our Service!
+
+Hi [Name],
+
+Thank you for joining [Service Name]! We're thrilled to have you on board. 
+
+Feel free to explore and let us know if you have any questions.
+
+Best regards,  
+[Your Company Name]`,
+  },
+  {
+    name: "followup",
+    title: "Follow-up Email",
+    content: `Subject: Just Checking In
+
+Hi [Name],
+
+I hope this message finds you well! I wanted to follow up regarding [specific topic]. Let me know if there's anything I can assist you with.
+
+Looking forward to your response.
+
+Best regards,  
+[Your Name]`,
+  },
+] as const;
+
+type EmailTemplateValue = (typeof email_templates)[number]["name"];
 
 export default EmailTab;
