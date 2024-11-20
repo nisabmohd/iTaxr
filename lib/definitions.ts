@@ -40,48 +40,63 @@ export const interviewFormSchema = z.object({
   residencyStates: z.array(z.string()),
 
   wages: z.number(),
+  spouseWages: z.number(),
   wagesFile: fileSchema,
 
   businessIncome: z.boolean(),
+  spouseBusinessIncome: z.boolean(),
   businessIncomeFile: fileSchema,
 
   rentalIncome: z.boolean(),
+  spouseRentalIncome: z.boolean(),
   rentalIncomeFile: fileSchema,
 
   interestIncome: z.boolean(),
+  spouseInterestIncome: z.boolean(),
   interestIncomeFile: fileSchema,
 
   dividendIncome: z.boolean(),
+  spouseDividendIncome: z.boolean(),
   dividendIncomeFile: fileSchema,
 
   saleOfStock_CryptoIncome: z.any(),
+  spouseSaleOfStock_CryptoIncome: z.any(),
   saleOfStock_CryptoIncomeFile: fileSchema,
 
   retirePlanIncome: z.boolean(),
+  spouseRetirePlanIncome: z.boolean(),
   retirePlanIncomeFile: fileSchema,
 
   mortgageInterest: z.boolean(),
+  spouseMortgageInterest: z.boolean(),
   mortgageInterestFile: fileSchema,
 
   propertyTax: z.boolean(),
+  spousePropertyTax: z.boolean(),
   propertyTaxFile: fileSchema,
 
   charitableDonations: z.boolean(),
+  spouseCharitableDonations: z.boolean(),
   charitableDonationsFile: fileSchema,
 
   medicalExpenses: z.boolean(),
+  spouseMedicalExpenses: z.boolean(),
   medicalExpensesFile: fileSchema,
 
   studentLoanInterest: z.boolean(),
+  spouseStudentLoanInterest: z.boolean(),
   studentLoanInterestFile: fileSchema,
 
   educationExpenses: z.boolean(),
+  spouseEducationExpenses: z.boolean(),
   educationExpensesFile: fileSchema,
 
   fbar: z.boolean(),
+  spouseFbar: z.boolean(),
   fbarFile: fileSchema,
 
   fatca_pfic: z.boolean(),
+  spouseFatca_pfic: z.boolean(),
   fatca_pfic_File: fileSchema,
 });
 
