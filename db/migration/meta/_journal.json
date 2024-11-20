@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1732123102448,
+      "tag": "0000_legal_sentinels",
+      "breakpoints": true
+    }
+  ]
+}

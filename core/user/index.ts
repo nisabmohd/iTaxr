@@ -131,7 +131,7 @@ export const submitInterviewSheet = async (
     visaCategory: i.visaCategory,
     occupation: i.occupation,
     residencyStates: residencyStates,
-  }).execute();
+  }).$returningId().execute();
 
   const call2 = db.insert(userDependentDetails).values(dependentInsert)
     .execute();
@@ -140,52 +140,72 @@ export const submitInterviewSheet = async (
     userId: i.id,
 
     wages: i.wages,
+    spouseWages: i.spouseWages,
     wagesFile: i.wagesFile,
 
     businessIncome: i.businessIncome,
+    spouseBusinessIncome: i.spouseBusinessIncome,
     businessIncomeFile: i.businessIncomeFile,
 
     rentalIncome: i.rentalIncome,
+    spouseRentalIncome: i.spouseRentalIncome,
     rentalIncomeFile: i.rentalIncomeFile,
 
     interestIncome: i.interestIncome,
+    spouseInterestIncome: i.spouseInterestIncome,
     interestIncomeFile: i.interestIncomeFile,
 
     dividendIncome: i.dividendIncome,
+    spouseDividendIncome: i.spouseDividendIncome,
     dividendIncomeFile: i.dividendIncomeFile,
 
     saleOfStock_CryptoIncome: i.saleOfStock_CryptoIncome,
+    spouseSaleOfStock_CryptoIncome: i.spouseSaleOfStock_CryptoIncome,
     saleOfStock_CryptoIncomeFile: i.saleOfStock_CryptoIncomeFile,
 
     retirePlanIncome: i.retirePlanIncome,
+    spouseRetirePlanIncome: i.spouseRetirePlanIncome,
     retirePlanIncomeFile: i.retirePlanIncomeFile,
 
     mortgageInterest: i.mortgageInterest,
+    spouseMortgageInterest: i.spouseMortgageInterest,
     mortgageInterestFile: i.mortgageInterestFile,
 
     propertyTax: i.propertyTax,
+    spousePropertyTax: i.spousePropertyTax,
     propertyTaxFile: i.propertyTaxFile,
 
     charitableDonations: i.charitableDonations,
+    spouseCharitableDonations: i.spouseCharitableDonations,
     charitableDonationsFile: i.charitableDonationsFile,
 
     medicalExpenses: i.medicalExpenses,
+    spouseMedicalExpenses: i.spouseMedicalExpenses,
     medicalExpensesFile: i.medicalExpensesFile,
 
     studentLoanInterest: i.studentLoanInterest,
+    spouseStudentLoanInterest: i.spouseStudentLoanInterest,
     studentLoanInterestFile: i.studentLoanInterestFile,
 
     educationExpenses: i.educationExpenses,
+    spouseEducationExpenses: i.spouseEducationExpenses,
     educationExpensesFile: i.educationExpensesFile,
 
     fbar: i.fbar,
+    spouseFbar: i.spouseFbar,
     fbarFile: i.fbarFile,
 
     fatca_pfic: i.fatca_pfic,
+    spouseFatca_pfic: i.spouseFatca_pfic,
     fatca_pfic_File: i.fatca_pfic_File,
   }).execute();
 
-  await Promise.all([call1, call2, call3]);
+  const [data1, d2, d3] = await Promise.all([call1, call2, call3]);
+  const fileId = data1[0].id
+
+  await db.update(userInterviewDetails).set({
+    fileNumber: `${new Date().toISOString().split('-')[0]}-${fileId.toString().padStart(5, "0")}`
+  }).where(eq(userInterviewDetails.userId, i.id)).execute()
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
