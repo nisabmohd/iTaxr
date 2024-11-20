@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { states } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 type DependentDetail = {
   firstName: string;
@@ -110,6 +111,7 @@ type FormData = {
 };
 
 export default function InterviewSheetForm() {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<FormData>({
     maritalStatus: "",
     firstName: "",
@@ -213,7 +215,11 @@ export default function InterviewSheetForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form data:", formData);
-    // Here you would typically validate the data and send it to your server
+    toast({
+      title: "Interview Sheet Submitted",
+      description: `The interview sheet is submitted and will be processed`,
+      variant: "success",
+    });
   };
 
   const renderInput = (
@@ -246,7 +252,7 @@ export default function InterviewSheetForm() {
         id={name}
         name={name}
         onChange={handleFileChange}
-        accept=".pdf,.docx"
+        accept=".pdf"
       />
     </div>
   );
@@ -382,12 +388,13 @@ export default function InterviewSheetForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 mx-auto -mt-5">
+    <form onSubmit={handleSubmit} className="space-y-4 mx-auto -mt-5">
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Personal Information</CardTitle>
           <p className="!mb-5 !mt-3.5 text-sm text-muted-foreground">
-            Fields marked with an asterisk (*) are mandatory.
+            Fields marked with an asterisk (*) are mandatory. Also upload
+            supports PDF only which is less than 2MB.
           </p>
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-6 px-0">
@@ -421,6 +428,9 @@ export default function InterviewSheetForm() {
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Spouse Details</CardTitle>
+          <p className="!mt-3.5 text-sm text-muted-foreground">
+            Enter spouse details, can be disable as well
+          </p>
         </CardHeader>
         <CardContent className="space-y-4 px-0">
           {renderBooleanSelect(
@@ -445,6 +455,9 @@ export default function InterviewSheetForm() {
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Dependent Details</CardTitle>
+          <p className="!mt-3.5 text-sm text-muted-foreground">
+            Enter dependent details, can add multiple
+          </p>
         </CardHeader>
         <CardContent className="px-0">
           <DependentDetails />
@@ -454,6 +467,9 @@ export default function InterviewSheetForm() {
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Residency States</CardTitle>
+          <p className=" !mt-3.5 text-sm text-muted-foreground">
+            Select residency states can be multiple
+          </p>
         </CardHeader>
         <CardContent className="px-0">
           <Select
@@ -505,6 +521,9 @@ export default function InterviewSheetForm() {
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Source of Income</CardTitle>
+          <p className="!mt-3.5 text-sm text-muted-foreground">
+            Enter income details and also can upload PDF files
+          </p>
         </CardHeader>
         <CardContent className="space-y-6 px-0">
           {renderInput("wages", "Wages", "number")}
@@ -571,6 +590,9 @@ export default function InterviewSheetForm() {
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Source of Deduction/Benefits</CardTitle>
+          <p className="!mt-3.5 text-sm text-muted-foreground">
+            Enter deduction details and also can upload PDF files
+          </p>
         </CardHeader>
         <CardContent className="space-y-6 px-0">
           {renderInput("mortgageInterest", "Mortgage Interest", "number")}
@@ -633,6 +655,9 @@ export default function InterviewSheetForm() {
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Other Disclosure</CardTitle>
+          <p className="!mt-3.5 text-sm text-muted-foreground">
+            Enter other disclosure details and also can upload PDF files
+          </p>
         </CardHeader>
         <CardContent className="space-y-6 px-0">
           {renderBooleanSelect("fbar", "FBAR")}

@@ -6,7 +6,7 @@ import {
   userPreTaxDocs,
   users,
   userSourceIncome_Deductions,
-} from "./user";
+} from "./schema";
 import { z } from "zod";
 import { db } from "@/db/client";
 import { eq } from "drizzle-orm";

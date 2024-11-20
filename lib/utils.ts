@@ -77,9 +77,8 @@ export const clientFileInputSchema = z
     (file) =>
       [
         "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ].includes(file.type),
-    { message: "Only PDF and DOCX files are allowed." },
+    { message: "Only PDF files are allowed." },
   )
   .refine((file) => file.size <= 2 * 1024 * 1024, {
     message: "File size must be less than 2MB.",

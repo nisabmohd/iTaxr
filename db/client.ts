@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 import { drizzle, MySql2DrizzleConfig } from "drizzle-orm/mysql2";
-import * as schema from "../core/user/user";
+import * as schema from "../core/user/schema";
 
 const poolConnection = mysql.createPool(process.env.DATABASE_URL!);
 
@@ -12,7 +12,3 @@ const config: MySql2DrizzleConfig<Schema> = {
   mode: "default",
 };
 export const db = drizzle(poolConnection, config);
-
-export type db = typeof db;
-
-export default db;

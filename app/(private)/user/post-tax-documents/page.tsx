@@ -158,6 +158,7 @@ export default function FormsAndDocuments() {
                         field.onChange(file);
                       }
                     }}
+                    accept=".pdf"
                   />
                 </FormControl>
                 <FormMessage />
