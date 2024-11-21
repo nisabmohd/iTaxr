@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-// file stored in base64
-const fileSchema = z.string();
-
 const passwordSchema = z
   .string()
   .min(8, "Password must be at least 8 characters")
@@ -22,8 +19,23 @@ export const interviewFormSchema = z.object({
     .min(2, { message: "Last name must be at least 2 characters." }),
   ssn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
   dob: z.string(),
+  spouseFirstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
+  spouseMiddleName: z.string(),
+  spouseLastName: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters." }),
+  spouseEmail: z.string().email(),
+  spousePhoneNumber: z.string()
+    .min(10, "Phone number must be at least 10 digits")
+    .max(20, "Phone number must be 20 digits or fewer")
+    .regex(/^[0-9]+$/, "Phone number should contain only digits"),
+  spouseSsn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
+  spouseDob: z.string(),
   visaCategory: z.string(),
   occupation: z.string(),
+  spouseOccupation: z.string(),
   currentAddress: z.string(),
   currentCity: z.string(),
   currentState: z.string(),
@@ -41,63 +53,63 @@ export const interviewFormSchema = z.object({
 
   wages: z.number(),
   spouseWages: z.number(),
-  wagesFile: fileSchema,
+  wagesFile: z.string(),
 
   businessIncome: z.boolean(),
   spouseBusinessIncome: z.boolean(),
-  businessIncomeFile: fileSchema,
+  businessIncomeFile: z.string(),
 
   rentalIncome: z.boolean(),
   spouseRentalIncome: z.boolean(),
-  rentalIncomeFile: fileSchema,
+  rentalIncomeFile: z.string(),
 
   interestIncome: z.boolean(),
   spouseInterestIncome: z.boolean(),
-  interestIncomeFile: fileSchema,
+  interestIncomeFile: z.string(),
 
   dividendIncome: z.boolean(),
   spouseDividendIncome: z.boolean(),
-  dividendIncomeFile: fileSchema,
+  dividendIncomeFile: z.string(),
 
   saleOfStock_CryptoIncome: z.any(),
   spouseSaleOfStock_CryptoIncome: z.any(),
-  saleOfStock_CryptoIncomeFile: fileSchema,
+  saleOfStock_CryptoIncomeFile: z.string(),
 
   retirePlanIncome: z.boolean(),
   spouseRetirePlanIncome: z.boolean(),
-  retirePlanIncomeFile: fileSchema,
+  retirePlanIncomeFile: z.string(),
 
   mortgageInterest: z.boolean(),
   spouseMortgageInterest: z.boolean(),
-  mortgageInterestFile: fileSchema,
+  mortgageInterestFile: z.string(),
 
   propertyTax: z.boolean(),
   spousePropertyTax: z.boolean(),
-  propertyTaxFile: fileSchema,
+  propertyTaxFile: z.string(),
 
   charitableDonations: z.boolean(),
   spouseCharitableDonations: z.boolean(),
-  charitableDonationsFile: fileSchema,
+  charitableDonationsFile: z.string(),
 
   medicalExpenses: z.boolean(),
   spouseMedicalExpenses: z.boolean(),
-  medicalExpensesFile: fileSchema,
+  medicalExpensesFile: z.string(),
 
   studentLoanInterest: z.boolean(),
   spouseStudentLoanInterest: z.boolean(),
-  studentLoanInterestFile: fileSchema,
+  studentLoanInterestFile: z.string(),
 
   educationExpenses: z.boolean(),
   spouseEducationExpenses: z.boolean(),
-  educationExpensesFile: fileSchema,
+  educationExpensesFile: z.string(),
 
   fbar: z.boolean(),
   spouseFbar: z.boolean(),
-  fbarFile: fileSchema,
+  fbarFile: z.string(),
 
   fatca_pfic: z.boolean(),
   spouseFatca_pfic: z.boolean(),
-  fatca_pfic_File: fileSchema,
+  fatca_pfic_File: z.string(),
 });
 
 export const userRegistrationSchema = z.object({
@@ -126,7 +138,7 @@ export const loginSchema = z.object({
 
 export const prePostTaxDocsSchema = z.object({
   documentType: z.string(),
-  documentTypeFile: fileSchema,
+  documentTypeFile: z.string(),
   documentRemarks: z.string().optional(),
 });
 

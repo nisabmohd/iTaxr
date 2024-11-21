@@ -41,16 +41,26 @@ export const users = mysqlTable("users", {
 export const userInterviewDetails = mysqlTable("userInterviewDetails", {
   id: int("id").autoincrement().primaryKey(),
   userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
-  fileNumber: char("file_number", { length: 10 }),
+  fileNumber: char("file_number", { length: 20 }),
   firstName: varchar("first_name", { length: 100 }),
+  spouseFirstName: varchar("spouse_first_name", { length: 100 }),
   middleName: varchar("middle_name", { length: 100 }).notNull(),
+  spouseMiddleName: varchar("spouse_middle_name", { length: 100 }).notNull(),
   lastName: varchar("last_name", { length: 100 }),
+  spouseLastName: varchar("spouse_last_name", { length: 100 }),
+  spouseEmail: varchar("spouse_email", { length: 255 }).notNull(),
+  spousePhoneNumber: varchar("spouse_phone_number", { length: 20 }).notNull(),
   ssn_or_itin: varchar("ssn_or_itin", { length: 20 }),
+  spouse_ssn_or_itin: varchar("spouse_ssn_or_itin", { length: 20 }),
+  dob: date("dob"),
+  spouseDob: date("spouse_dob"),
   currentAddress: varchar("current_address", { length: 255 }),
   currentCity: varchar("current_city", { length: 100 }),
   currentState: varchar("current_state", { length: 30 }),
+  currentZipcode: varchar("current_zipcode", { length: 30 }),
   visaCategory: varchar("visa_category", { length: 50 }).notNull(),
   occupation: varchar("occupation", { length: 100 }),
+  spouseOccupation: varchar("spouse_occupation", { length: 100 }),
   residencyStates: json().$type<ResidencyStates>(),
 });
 
@@ -69,7 +79,7 @@ export const userPreTaxDocs = mysqlTable("userPreTaxDocs", {
   id: int("id").autoincrement().primaryKey(),
   userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
   documentType: varchar("document_type", { length: 100 }),
-  documentTypeFile: text("document_file"),
+  documentTypeFile: char("document_file", { length: 10 }).references(() => documents.id),
   documentRemarks: text("document_file_remarks"),
 });
 
@@ -77,12 +87,12 @@ export const userPostTaxDocs = mysqlTable("userPostTaxDocs", {
   id: int("id").autoincrement().primaryKey(),
   userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
   documentType: varchar("document_type", { length: 100 }),
-  documentTypeFile: text("document_file"),
+  documentTypeFile: char("document_file", { length: 10 }).references(() => documents.id),
   documentRemarks: text("document_file_remarks"),
 });
 
-export const userSourceIncome_Deductions = mysqlTable(
-  "userSourceIncome_Deductions",
+export const userSourceIncDeduct = mysqlTable(
+  "userSourceIncDeduct",
   {
     id: int("id").autoincrement().primaryKey(),
     userId: char("user_id", { length: 10 }).notNull().references(() =>
@@ -90,49 +100,49 @@ export const userSourceIncome_Deductions = mysqlTable(
     ),
     wages: int("wages"),
     spouseWages: int("spouse_wages"),
-    wagesFile: text("wages_file"),
+    wagesFile: char("wages_file", { length: 10 }).references(() => documents.id),
     businessIncome: boolean("business_income"),
     spouseBusinessIncome: boolean("spouse_business_income"),
-    businessIncomeFile: text("business_income_file"),
+    businessIncomeFile: char("business_income_file", { length: 10 }).references(() => documents.id),
     rentalIncome: boolean("rental_income"),
     spouseRentalIncome: boolean("spouse_rental_income"),
-    rentalIncomeFile: text("rental_income_file"),
+    rentalIncomeFile: char("rental_income_file", { length: 10 }).references(() => documents.id),
     interestIncome: boolean("interest_income"),
     spouseInterestIncome: boolean("spouse_interest_income"),
-    interestIncomeFile: text("interest_income_file"),
+    interestIncomeFile: char("interest_income_file", { length: 10 }).references(() => documents.id),
     dividendIncome: boolean("dividend_income"),
     spouseDividendIncome: boolean("spouse_dividend_income"),
-    dividendIncomeFile: text("dividend_income_file"),
-    saleOfStock_CryptoIncome: boolean("sale_of_stock_crypto_income"),
-    spouseSaleOfStock_CryptoIncome: boolean("spouse_sale_of_stock_crypto_income"),
-    saleOfStock_CryptoIncomeFile: text("sale_of_stock_crypto_income_file"),
+    dividendIncomeFile: char("dividend_income_file", { length: 10 }).references(() => documents.id),
+    saleOfStockCryInc: boolean("sale_of_st_cry_inc"),
+    spouseSaleOfStockCryInc: boolean("spouse_sale_of_st_cry_inc"),
+    saleOfStockCryIncFile: char("sale_of_st_cry_inc_file", { length: 10 }).references(() => documents.id),
     retirePlanIncome: boolean("retire_plan_income"),
     spouseRetirePlanIncome: boolean("spouse_retire_plan_income"),
-    retirePlanIncomeFile: text("retire_plan_income_file"),
+    retirePlanIncomeFile: char("retire_plan_income_file", { length: 10 }).references(() => documents.id),
     mortgageInterest: boolean("mortgage_interest"),
     spouseMortgageInterest: boolean("spouse_mortgage_interest"),
-    mortgageInterestFile: text("mortgage_interest_file"),
+    mortgageInterestFile: char("mortgage_interest_file", { length: 10 }).references(() => documents.id),
     propertyTax: boolean("property_tax"),
     spousePropertyTax: boolean("spouse_property_tax"),
-    propertyTaxFile: text("property_tax_file"),
+    propertyTaxFile: char("property_tax_file", { length: 10 }).references(() => documents.id),
     charitableDonations: boolean("charitable_donations"),
     spouseCharitableDonations: boolean("spouse_charitable_donations"),
-    charitableDonationsFile: text("charitable_donations_file"),
+    charitableDonationsFile: char("charitable_donations_file", { length: 10 }).references(() => documents.id),
     medicalExpenses: boolean("medical_expenses"),
     spouseMedicalExpenses: boolean("spouse_medical_expenses"),
-    medicalExpensesFile: text("medical_expenses_file"),
+    medicalExpensesFile: char("medical_expenses_file", { length: 10 }).references(() => documents.id),
     studentLoanInterest: boolean("student_loan_interest"),
     spouseStudentLoanInterest: boolean("spouse_student_loan_interest"),
-    studentLoanInterestFile: text("student_loan_interest_file"),
+    studentLoanInterestFile: char("student_loan_interest_file", { length: 10 }).references(() => documents.id),
     educationExpenses: boolean("education_expenses"),
     spouseEducationExpenses: boolean("spouse_education_expenses"),
-    educationExpensesFile: text("education_expenses_file"),
+    educationExpensesFile: char("education_expenses_file", { length: 10 }).references(() => documents.id),
     fbar: boolean("fbar"),
     spouseFbar: boolean("spouse_fbar"),
-    fbarFile: text("fbar_file"),
+    fbarFile: char("fbar_file", { length: 10 }).references(() => documents.id),
     fatca_pfic: boolean("fatca_pfic"),
     spouseFatca_pfic: boolean("spouse_fatca_pfic"),
-    fatca_pfic_File: text("fatca_pfic_File"),
+    fatca_pfic_File: char("fatca_pfic_File", { length: 10 }).references(() => documents.id),
   },
 );
 
@@ -179,16 +189,99 @@ export const proTaxUserRelation = relations(userPostTaxDocs, ({ one }) => ({
 }));
 
 export const userSourceIncomeRelation = relations(users, ({ many }) => ({
-  preTax: many(userSourceIncome_Deductions),
+  preTax: many(userSourceIncDeduct),
 }));
 
 export const sourceIncomeUserRelation = relations(
-  userSourceIncome_Deductions,
+  userSourceIncDeduct,
   ({ one }) => ({
     user: one(users, {
-      fields: [userSourceIncome_Deductions.userId],
+      fields: [userSourceIncDeduct.userId],
       references: [users.id],
     }),
   }),
 );
 export type { ResidencyStates };
+
+
+export const documents = mysqlTable("documents", {
+  id: char("id", { length: 10 }).primaryKey(),
+  document: text("document")
+})
+
+export const userSourceIncDeductRel = relations(userSourceIncDeduct, ({ one }) => ({
+  wagesDocument: one(documents, {
+    fields: [userSourceIncDeduct.wagesFile],
+    references: [documents.id]
+  }),
+
+  businessIncomeDocument: one(documents, {
+    fields: [userSourceIncDeduct.businessIncomeFile],
+    references: [documents.id]
+  }),
+
+  rentalIncomeDocument: one(documents, {
+    fields: [userSourceIncDeduct.rentalIncomeFile],
+    references: [documents.id]
+  }),
+
+  interestIncomeDocument: one(documents, {
+    fields: [userSourceIncDeduct.interestIncomeFile],
+    references: [documents.id]
+  }),
+
+  dividendIncomeDocument: one(documents, {
+    fields: [userSourceIncDeduct.dividendIncomeFile],
+    references: [documents.id]
+  }),
+
+  saleOfStockCryptoIncomeDocument: one(documents, {
+    fields: [userSourceIncDeduct.saleOfStockCryIncFile],
+    references: [documents.id]
+  }),
+
+  retirePlanIncomeDocument: one(documents, {
+    fields: [userSourceIncDeduct.retirePlanIncomeFile],
+    references: [documents.id]
+  }),
+
+  mortgageInterestDocument: one(documents, {
+    fields: [userSourceIncDeduct.mortgageInterestFile],
+    references: [documents.id]
+  }),
+
+  propertyTaxDocument: one(documents, {
+    fields: [userSourceIncDeduct.propertyTaxFile],
+    references: [documents.id]
+  }),
+
+  charitableDonationsDocument: one(documents, {
+    fields: [userSourceIncDeduct.charitableDonationsFile],
+    references: [documents.id]
+  }),
+
+  medicalExpensesDocument: one(documents, {
+    fields: [userSourceIncDeduct.medicalExpensesFile],
+    references: [documents.id]
+  }),
+
+  studentLoanInterestDocument: one(documents, {
+    fields: [userSourceIncDeduct.studentLoanInterestFile],
+    references: [documents.id]
+  }),
+
+  educationExpensesDocument: one(documents, {
+    fields: [userSourceIncDeduct.educationExpensesFile],
+    references: [documents.id]
+  }),
+
+  fbarDocument: one(documents, {
+    fields: [userSourceIncDeduct.fbarFile],
+    references: [documents.id]
+  }),
+
+  fatcaPficDocument: one(documents, {
+    fields: [userSourceIncDeduct.fatca_pfic_File],
+    references: [documents.id]
+  })
+}));

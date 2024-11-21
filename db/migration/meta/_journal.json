@@ -5,8 +5,15 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1732123102448,
-      "tag": "0000_legal_sentinels",
+      "when": 1732176506955,
+      "tag": "0000_crazy_red_wolf",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1732180452846,
+      "tag": "0001_bright_ghost_rider",
       "breakpoints": true
     }
   ]

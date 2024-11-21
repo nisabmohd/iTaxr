@@ -54,6 +54,7 @@ export default function FormsAndDocuments() {
     const { file, documentType, remarks } = data;
     startTransition(async () => {
       const base64File = await fileToBase64(file);
+      console.log(base64File);
       const resp = await postTaxFormAction({
         documentType,
         documentRemarks: remarks,

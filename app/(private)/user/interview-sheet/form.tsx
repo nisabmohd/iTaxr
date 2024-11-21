@@ -12,8 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { states } from "@/lib/utils";
+import { fileToBase64, states } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { uploadDocumentAction } from "@/actions/user-forms";
 
 type DependentDetail = {
   firstName: string;
@@ -61,53 +62,53 @@ type FormData = {
   // Source of Income section
   wages: number;
   spouseWages: number;
-  wagesFile: File | null;
+  wagesFile: string | null;
   businessIncome: number;
   spouseBusinessIncome: number;
-  businessIncomeFile: File | null;
+  businessIncomeFile: string | null;
   rentalIncome: number;
   spouseRentalIncome: number;
-  rentalIncomeFile: File | null;
+  rentalIncomeFile: string | null;
   interestIncome: number;
   spouseInterestIncome: number;
-  interestIncomeFile: File | null;
+  interestIncomeFile: string | null;
   dividendIncome: number;
   spouseDividendIncome: number;
-  dividendIncomeFile: File | null;
+  dividendIncomeFile: string | null;
   saleOfStock_CryptoIncome: number;
   spouseSaleOfStock_CryptoIncome: number;
-  saleOfStock_CryptoIncomeFile: File | null;
+  saleOfStock_CryptoIncomeFile: string | null;
   retirePlanIncome: number;
   spouseRetirePlanIncome: number;
-  retirePlanIncomeFile: File | null;
+  retirePlanIncomeFile: string | null;
 
   // Source of Deduction/Benefits section
   mortgageInterest: number;
   spouseMortgageInterest: number;
-  mortgageInterestFile: File | null;
+  mortgageInterestFile: string | null;
   propertyTax: number;
   spousePropertyTax: number;
-  propertyTaxFile: File | null;
+  propertyTaxFile: string | null;
   charitableDonations: number;
   spouseCharitableDonations: number;
-  charitableDonationsFile: File | null;
+  charitableDonationsFile: string | null;
   medicalExpenses: number;
   spouseMedicalExpenses: number;
-  medicalExpensesFile: File | null;
+  medicalExpensesFile: string | null;
   studentLoanInterest: number;
   spouseStudentLoanInterest: number;
-  studentLoanInterestFile: File | null;
+  studentLoanInterestFile: string | null;
   educationExpenses: number;
   spouseEducationExpenses: number;
-  educationExpensesFile: File | null;
+  educationExpensesFile: string | null;
 
   // Other Disclosure section
   fbar: boolean;
   spouseFbar: boolean;
-  fbarFile: File | null;
+  fbarFile: string | null;
   fatca_pfic: boolean;
   spouseFatca_pfic: boolean;
-  fatca_pfic_File: File | null;
+  fatca_pfic_File: string | null;
 };
 
 export default function InterviewSheetForm() {
@@ -202,19 +203,21 @@ export default function InterviewSheetForm() {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files && files[0]) {
+      const base64Str = await fileToBase64(files[0])
+      const uploadResult = await uploadDocumentAction(base64Str);
       setFormData((prev) => ({
         ...prev,
-        [name]: files[0],
+        [name]: uploadResult,
       }));
     }
+    console.log(formData);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form data:", formData);
     toast({
       title: "Interview Sheet Submitted",
       description: `The interview sheet is submitted and will be processed`,
@@ -530,55 +533,49 @@ export default function InterviewSheetForm() {
           {formData.includeSpouseDetails &&
             renderInput("spouseWages", "Spouse Wages", "number")}
           {renderFileInput("wagesFile", "Wages File")}
-          {renderInput("businessIncome", "Business Income", "number")}
+          {renderBooleanSelect("businessIncome", "Business Income")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseBusinessIncome",
-              "Spouse Business Income",
-              "number"
+              "Spouse Business Income"
             )}
           {renderFileInput("businessIncomeFile", "Business Income File")}
-          {renderInput("rentalIncome", "Rental Income", "number")}
+          {renderBooleanSelect("rentalIncome", "Rental Income")}
           {formData.includeSpouseDetails &&
-            renderInput("spouseRentalIncome", "Spouse Rental Income", "number")}
+            renderBooleanSelect("spouseRentalIncome", "Spouse Rental Income")}
           {renderFileInput("rentalIncomeFile", "Rental Income File")}
-          {renderInput("interestIncome", "Interest Income", "number")}
+          {renderBooleanSelect("interestIncome", "Interest Income")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseInterestIncome",
-              "Spouse Interest Income",
-              "number"
+              "Spouse Interest Income"
             )}
           {renderFileInput("interestIncomeFile", "Interest Income File")}
-          {renderInput("dividendIncome", "Dividend Income", "number")}
+          {renderBooleanSelect("dividendIncome", "Dividend Income")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseDividendIncome",
-              "Spouse Dividend Income",
-              "number"
+              "Spouse Dividend Income"
             )}
           {renderFileInput("dividendIncomeFile", "Dividend Income File")}
-          {renderInput(
+          {renderBooleanSelect(
             "saleOfStock_CryptoIncome",
-            "Sale of Stock/Crypto Income",
-            "number"
+            "Sale of Stock/Crypto Income"
           )}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseSaleOfStock_CryptoIncome",
-              "Spouse Sale of Stock/Crypto Income",
-              "number"
+              "Spouse Sale of Stock/Crypto Income"
             )}
           {renderFileInput(
             "saleOfStock_CryptoIncomeFile",
             "Sale of Stock/Crypto Income File"
           )}
-          {renderInput("retirePlanIncome", "Retirement Plan Income", "number")}
+          {renderBooleanSelect("retirePlanIncome", "Retirement Plan Income")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseRetirePlanIncome",
-              "Spouse Retirement Plan Income",
-              "number"
+              "Spouse Retirement Plan Income"
             )}
           {renderFileInput(
             "retirePlanIncomeFile",
@@ -595,58 +592,52 @@ export default function InterviewSheetForm() {
           </p>
         </CardHeader>
         <CardContent className="space-y-6 px-0">
-          {renderInput("mortgageInterest", "Mortgage Interest", "number")}
+          {renderBooleanSelect("mortgageInterest", "Mortgage Interest")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseMortgageInterest",
-              "Spouse Mortgage Interest",
-              "number"
+              "Spouse Mortgage Interest"
             )}
           {renderFileInput("mortgageInterestFile", "Mortgage Interest File")}
-          {renderInput("propertyTax", "Property Tax", "number")}
+          {renderBooleanSelect("propertyTax", "Property Tax")}
           {formData.includeSpouseDetails &&
-            renderInput("spousePropertyTax", "Spouse Property Tax", "number")}
+            renderBooleanSelect("spousePropertyTax", "Spouse Property Tax")}
           {renderFileInput("propertyTaxFile", "Property Tax File")}
-          {renderInput("charitableDonations", "Charitable Donations", "number")}
+          {renderBooleanSelect("charitableDonations", "Charitable Donations")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseCharitableDonations",
-              "Spouse Charitable Donations",
-              "number"
+              "Spouse Charitable Donations"
             )}
           {renderFileInput(
             "charitableDonationsFile",
             "Charitable Donations File"
           )}
-          {renderInput("medicalExpenses", "Medical Expenses", "number")}
+          {renderBooleanSelect("medicalExpenses", "Medical Expenses")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseMedicalExpenses",
-              "Spouse Medical Expenses",
-              "number"
+              "Spouse Medical Expenses"
             )}
           {renderFileInput("medicalExpensesFile", "Medical Expenses File")}
-          {renderInput(
+          {renderBooleanSelect(
             "studentLoanInterest",
-            "Student Loan Interest",
-            "number"
+            "Student Loan Interest"
           )}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseStudentLoanInterest",
-              "Spouse Student Loan Interest",
-              "number"
+              "Spouse Student Loan Interest"
             )}
           {renderFileInput(
             "studentLoanInterestFile",
             "Student Loan Interest File"
           )}
-          {renderInput("educationExpenses", "Education Expenses", "number")}
+          {renderBooleanSelect("educationExpenses", "Education Expenses")}
           {formData.includeSpouseDetails &&
-            renderInput(
+            renderBooleanSelect(
               "spouseEducationExpenses",
-              "Spouse Education Expenses",
-              "number"
+              "Spouse Education Expenses"
             )}
           {renderFileInput("educationExpensesFile", "Education Expenses File")}
         </CardContent>

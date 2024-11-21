@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "baf96e8a-972c-4079-b149-e4b0fa0b1890",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "0af52250-13ae-4680-998d-633d76e2f3fe",
+  "prevId": "baf96e8a-972c-4079-b149-e4b0fa0b1890",
   "tables": {
     "documents": {
       "name": "documents",
@@ -153,8 +153,22 @@
           "notNull": false,
           "autoincrement": false
         },
+        "spouse_first_name": {
+          "name": "spouse_first_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "middle_name": {
           "name": "middle_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "spouse_middle_name": {
+          "name": "spouse_middle_name",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true,
@@ -167,9 +181,51 @@
           "notNull": false,
           "autoincrement": false
         },
+        "spouse_last_name": {
+          "name": "spouse_last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_email": {
+          "name": "spouse_email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "spouse_phone_number": {
+          "name": "spouse_phone_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "ssn_or_itin": {
           "name": "ssn_or_itin",
           "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_ssn_or_itin": {
+          "name": "spouse_ssn_or_itin",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dob": {
+          "name": "dob",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_dob": {
+          "name": "spouse_dob",
+          "type": "date",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -195,6 +251,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "current_zipcode": {
+          "name": "current_zipcode",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "visa_category": {
           "name": "visa_category",
           "type": "varchar(50)",
@@ -204,6 +267,13 @@
         },
         "occupation": {
           "name": "occupation",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_occupation": {
+          "name": "spouse_occupation",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false,

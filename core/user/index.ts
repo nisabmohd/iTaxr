@@ -1,13 +1,14 @@
 import {
+  documents,
   ResidencyStates,
   userDependentDetails,
   userInterviewDetails,
   userPostTaxDocs,
   userPreTaxDocs,
   users,
-  userSourceIncome_Deductions,
+  userSourceIncDeduct,
 } from "./schema";
-import { z } from "zod";
+import { string, z } from "zod";
 import { db } from "@/db/client";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
@@ -122,21 +123,31 @@ export const submitInterviewSheet = async (
   const call1 = db.insert(userInterviewDetails).values({
     userId: i.id,
     firstName: i.firstName,
+    spouseFirstName: i.spouseFirstName,
     middleName: i.middleName,
+    spouseMiddleName: i.spouseMiddleName,
     lastName: i.lastName,
+    spouseLastName: i.spouseLastName,
+    spouseEmail: i.spouseEmail,
+    spousePhoneNumber: i.spousePhoneNumber,
     ssn_or_itin: i.ssn,
+    spouse_ssn_or_itin: i.spouseSsn,
+    dob: new Date(i.dob),
+    spouseDob: new Date(i.spouseDob),
     currentAddress: i.currentAddress,
     currentCity: i.currentCity,
     currentState: i.currentState,
+    currentZipcode: i.zipCode,
     visaCategory: i.visaCategory,
     occupation: i.occupation,
+    spouseOccupation: i.spouseOccupation,
     residencyStates: residencyStates,
   }).$returningId().execute();
 
   const call2 = db.insert(userDependentDetails).values(dependentInsert)
     .execute();
 
-  const call3 = db.insert(userSourceIncome_Deductions).values({
+  const call3 = db.insert(userSourceIncDeduct).values({
     userId: i.id,
 
     wages: i.wages,
@@ -159,9 +170,9 @@ export const submitInterviewSheet = async (
     spouseDividendIncome: i.spouseDividendIncome,
     dividendIncomeFile: i.dividendIncomeFile,
 
-    saleOfStock_CryptoIncome: i.saleOfStock_CryptoIncome,
-    spouseSaleOfStock_CryptoIncome: i.spouseSaleOfStock_CryptoIncome,
-    saleOfStock_CryptoIncomeFile: i.saleOfStock_CryptoIncomeFile,
+    saleOfStockCryInc: i.saleOfStock_CryptoIncome,
+    spouseSaleOfStockCryInc: i.spouseSaleOfStock_CryptoIncome,
+    saleOfStockCryIncFile: i.saleOfStock_CryptoIncomeFile,
 
     retirePlanIncome: i.retirePlanIncome,
     spouseRetirePlanIncome: i.spouseRetirePlanIncome,
@@ -260,3 +271,18 @@ export const changePassword = async (i: ChangePasswordInput) => {
     .where(eq(users.id, i.id))
     .execute();
 };
+
+
+export const uplaodDocument = async (doc: string): Promise<string> => {
+  try {
+
+    const newId = crypto.randomUUID().split('-')[0]
+    const res = await db.insert(documents).values({
+      id: newId,
+      document: doc
+    }).$returningId().execute()
+    return newId;
+  } catch (e) {
+    throw new Error("failed to uplaod document")
+  }
+}
