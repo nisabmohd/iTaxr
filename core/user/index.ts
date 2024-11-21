@@ -8,7 +8,7 @@ import {
   users,
   userSourceIncDeduct,
 } from "./schema";
-import { string, z } from "zod";
+import { z } from "zod";
 import { db } from "@/db/client";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
@@ -105,8 +105,10 @@ const interviewSchema = interviewFormSchema.extend({
   id: z.string(),
 });
 
+export type InterviewFormPayload = z.infer<typeof interviewSchema>;
+
 export const submitInterviewSheet = async (
-  i: z.infer<typeof interviewSchema>,
+  i: InterviewFormPayload,
 ) => {
   const residencyStates: ResidencyStates = { states: i.residencyStates };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,7 +135,7 @@ export const submitInterviewSheet = async (
     ssn_or_itin: i.ssn,
     spouse_ssn_or_itin: i.spouseSsn,
     dob: new Date(i.dob),
-    spouseDob: new Date(i.spouseDob),
+    spouseDob: i.spouseDob ? new Date(i.spouseDob) : undefined,
     currentAddress: i.currentAddress,
     currentCity: i.currentCity,
     currentState: i.currentState,
@@ -211,12 +213,14 @@ export const submitInterviewSheet = async (
     fatca_pfic_File: i.fatca_pfic_File,
   }).execute();
 
-  const [data1, d2, d3] = await Promise.all([call1, call2, call3]);
-  const fileId = data1[0].id
+  const [data1] = await Promise.all([call1, call2, call3]);
+  const fileId = data1[0].id;
 
   await db.update(userInterviewDetails).set({
-    fileNumber: `${new Date().toISOString().split('-')[0]}-${fileId.toString().padStart(5, "0")}`
-  }).where(eq(userInterviewDetails.userId, i.id)).execute()
+    fileNumber: `${new Date().toISOString().split("-")[0]}-${
+      fileId.toString().padStart(5, "0")
+    }`,
+  }).where(eq(userInterviewDetails.userId, i.id)).execute();
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -272,17 +276,15 @@ export const changePassword = async (i: ChangePasswordInput) => {
     .execute();
 };
 
-
 export const uplaodDocument = async (doc: string): Promise<string> => {
   try {
-
-    const newId = crypto.randomUUID().split('-')[0]
-    const res = await db.insert(documents).values({
+    const newId = crypto.randomUUID().split("-")[0];
+    await db.insert(documents).values({
       id: newId,
-      document: doc
-    }).$returningId().execute()
+      document: doc,
+    }).$returningId().execute();
     return newId;
-  } catch (e) {
-    throw new Error("failed to uplaod document")
+  } catch {
+    throw new Error("failed to uplaod document");
   }
-}
+};

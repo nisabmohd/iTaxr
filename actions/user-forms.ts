@@ -3,8 +3,10 @@
 import {
     changePassword,
     ChangePasswordInput,
+    InterviewFormPayload,
     personalDetialsUpdate,
     PrePostTaxPayload,
+    submitInterviewSheet,
     submitPostTaxDocs,
     submitPreTaxDocs,
     updatePersonalDetails,
@@ -81,15 +83,14 @@ export async function postTaxFormAction(
     }
 }
 
-export async function interviewSheetSubmitAction() {
-}
-
-export async function uploadDocumentAction(doc: string) {
+export async function interviewSheetSubmitAction(
+    payload: Omit<InterviewFormPayload, "id">,
+) {
+    const session = await getSession();
+    if (!session) return { success: false, message: "Unauthorized" };
     try {
-        const session = await getSession();
-        if (!session) return { success: false, message: "Unauthorized" };
-        console.log("HERE");
-        return await uplaodDocument(doc)
+        await submitInterviewSheet({ ...payload, id: session.id });
+        return { success: true };
     } catch (err) {
         return {
             success: false,
@@ -98,5 +99,24 @@ export async function uploadDocumentAction(doc: string) {
                 : "Something went wrong",
         };
     }
+}
 
+export async function uploadDocumentAction(doc: string) {
+    try {
+        const session = await getSession();
+        if (!session) return { success: false, message: "Unauthorized" };
+        console.log("HERE");
+        const fileId = await uplaodDocument(doc);
+        return {
+            success: true,
+            fileId,
+        };
+    } catch (err) {
+        return {
+            success: false,
+            message: err instanceof Error
+                ? err.message
+                : "Something went wrong",
+        };
+    }
 }

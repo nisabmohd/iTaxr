@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,10 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fileToBase64, states } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { uploadDocumentAction } from "@/actions/user-forms";
+import {
+  interviewSheetSubmitAction,
+  uploadDocumentAction,
+} from "@/actions/user-forms";
 
 type DependentDetail = {
   firstName: string;
@@ -48,9 +51,9 @@ type FormData = {
   spouseMiddleName: string;
   spouseLastName: string;
   spouseEmail: string;
-  spousePhone: string;
-  spouseSSN: string;
-  spouseDOB: string;
+  spousePhoneNumber: string;
+  spouseSsn: string;
+  spouseDob: string;
   spouseOccupation: string;
 
   // Dependent details section
@@ -113,6 +116,7 @@ type FormData = {
 
 export default function InterviewSheetForm() {
   const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState<FormData>({
     maritalStatus: "",
     firstName: "",
@@ -133,9 +137,9 @@ export default function InterviewSheetForm() {
     spouseMiddleName: "",
     spouseLastName: "",
     spouseEmail: "",
-    spousePhone: "",
-    spouseSSN: "",
-    spouseDOB: "",
+    spousePhoneNumber: "",
+    spouseSsn: "",
+    spouseDob: "",
     spouseOccupation: "",
     dependentDetails: [
       {
@@ -195,124 +199,160 @@ export default function InterviewSheetForm() {
     fatca_pfic_File: null,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "number" ? parseFloat(value) || 0 : value,
-    }));
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    if (files && files[0]) {
-      const base64Str = await fileToBase64(files[0])
-      const uploadResult = await uploadDocumentAction(base64Str);
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value, type } = e.target;
       setFormData((prev) => ({
         ...prev,
-        [name]: uploadResult,
+        [name]: type === "number" ? parseFloat(value) || 0 : value,
       }));
-    }
-    console.log(formData);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    toast({
-      title: "Interview Sheet Submitted",
-      description: `The interview sheet is submitted and will be processed`,
-      variant: "success",
-    });
-  };
-
-  const renderInput = (
-    name: keyof FormData,
-    label: string,
-    type: string = "text",
-    required: boolean = false
-  ) => (
-    <div className="space-y-2">
-      <Label htmlFor={name} className="flex items-center">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </Label>
-      <Input
-        type={type}
-        id={name}
-        name={name}
-        value={formData[name] as string}
-        onChange={handleInputChange}
-        required={required}
-      />
-    </div>
+    },
+    []
   );
 
-  const renderFileInput = (name: keyof FormData, label: string) => (
-    <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
-      <Input
-        type="file"
-        id={name}
-        name={name}
-        onChange={handleFileChange}
-        accept=".pdf"
-      />
-    </div>
+  const handleFileChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, files } = e.target;
+      if (files && files[0]) {
+        const base64Str = await fileToBase64(files[0]);
+        const uploadResult = await uploadDocumentAction(base64Str);
+        console.log(uploadResult);
+
+        if (uploadResult.success)
+          setFormData((prev) => ({
+            ...prev,
+            [name]: uploadResult.fileId,
+          }));
+      }
+    },
+    []
   );
 
-  const renderSelect = (
-    name: keyof FormData,
-    label: string,
-    options: { value: string; label: string }[],
-    required: boolean = false
-  ) => (
-    <div className="space-y-2">
-      <Label htmlFor={name} className="flex items-center">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </Label>
-      <Select
-        name={name}
-        onValueChange={(value) =>
-          setFormData((prev) => ({ ...prev, [name]: value }))
-        }
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select..." />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      console.log(formData);
+      startTransition(async () => {
+        const resp = await interviewSheetSubmitAction(formData);
+        console.log(resp);
+
+        if (resp.success)
+          toast({
+            title: "Interview Sheet Submitted",
+            description: `The interview sheet is submitted and will be processed`,
+            variant: "success",
+          });
+        else
+          toast({
+            title: "Interview Sheet upload failed",
+            description: `The interview sheet submission failed`,
+            variant: "destructive",
+          });
+      });
+    },
+    [toast, formData]
   );
 
-  const renderBooleanSelect = (name: keyof FormData, label: string) => (
-    <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
-      <Select
-        name={name}
-        value={formData[name] ? "yes" : "no"}
-        onValueChange={(value) =>
-          setFormData((prev) => ({ ...prev, [name]: value === "yes" }))
-        }
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select..." />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="yes">Yes</SelectItem>
-          <SelectItem value="no">No</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
+  const renderInput = useCallback(
+    (
+      name: keyof FormData,
+      label: string,
+      type: string = "text",
+      required: boolean = false
+    ) => (
+      <div className="space-y-2" key={name}>
+        <Label htmlFor={name} className="flex items-center">
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </Label>
+        <Input
+          type={type}
+          id={name}
+          name={name}
+          value={formData[name] as string}
+          onChange={handleInputChange}
+          required={required}
+        />
+      </div>
+    ),
+    [formData, handleInputChange]
   );
 
-  const DependentDetails = () => {
+  const renderFileInput = useCallback(
+    (name: keyof FormData, label: string) => (
+      <div className="space-y-2" key={name}>
+        <Label htmlFor={name}>{label}</Label>
+        <Input
+          type="file"
+          id={name}
+          name={name}
+          onChange={handleFileChange}
+          accept=".pdf"
+        />
+      </div>
+    ),
+    [handleFileChange]
+  );
+
+  const renderSelect = useCallback(
+    (
+      name: keyof FormData,
+      label: string,
+      options: { value: string; label: string }[],
+      required: boolean = false
+    ) => (
+      <div className="space-y-2" key={name}>
+        <Label htmlFor={name} className="flex items-center">
+          {label}
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </Label>
+        <Select
+          name={name}
+          onValueChange={(value) =>
+            setFormData((prev) => ({ ...prev, [name]: value }))
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select..." />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    ),
+    []
+  );
+
+  const renderBooleanSelect = useCallback(
+    (name: keyof FormData, label: string) => (
+      <div className="space-y-2" key={name}>
+        <Label htmlFor={name}>{label}</Label>
+        <Select
+          name={name}
+          value={formData[name] ? "yes" : "no"}
+          onValueChange={(value) =>
+            setFormData((prev) => ({ ...prev, [name]: value === "yes" }))
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="yes">Yes</SelectItem>
+            <SelectItem value="no">No</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    ),
+    [formData]
+  );
+
+  const DependentDetails = useCallback(() => {
     return (
       <>
         {formData.dependentDetails.map((dependent, index) => (
@@ -388,10 +428,16 @@ export default function InterviewSheetForm() {
         </Button>
       </>
     );
-  };
+  }, [formData.dependentDetails, renderInput]);
+
+  const memoizedDependentDetails = useMemo(
+    () => <DependentDetails />,
+    [DependentDetails]
+  );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mx-auto -mt-5">
+      {/* Personal Information */}
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Personal Information</CardTitle>
@@ -428,6 +474,7 @@ export default function InterviewSheetForm() {
         </CardContent>
       </Card>
 
+      {/* Spouse Details */}
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Spouse Details</CardTitle>
@@ -446,15 +493,16 @@ export default function InterviewSheetForm() {
               {renderInput("spouseMiddleName", "Spouse Middle Name")}
               {renderInput("spouseLastName", "Spouse Last Name")}
               {renderInput("spouseEmail", "Spouse Email", "email")}
-              {renderInput("spousePhone", "Spouse Phone", "tel")}
-              {renderInput("spouseSSN", "Spouse SSN")}
-              {renderInput("spouseDOB", "Spouse Date of Birth", "date")}
+              {renderInput("spousePhoneNumber", "Spouse Phone", "tel")}
+              {renderInput("spouseSsn", "Spouse SSN")}
+              {renderInput("spouseDob", "Spouse Date of Birth", "date")}
               {renderInput("spouseOccupation", "Spouse Occupation")}
             </div>
           )}
         </CardContent>
       </Card>
 
+      {/* Dependent Details */}
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Dependent Details</CardTitle>
@@ -462,11 +510,10 @@ export default function InterviewSheetForm() {
             Enter dependent details, can add multiple
           </p>
         </CardHeader>
-        <CardContent className="px-0">
-          <DependentDetails />
-        </CardContent>
+        <CardContent className="px-0">{memoizedDependentDetails}</CardContent>
       </Card>
 
+      {/* Residency States */}
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Residency States</CardTitle>
@@ -521,6 +568,7 @@ export default function InterviewSheetForm() {
         </CardContent>
       </Card>
 
+      {/* Source of Income */}
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Source of Income</CardTitle>
@@ -584,6 +632,7 @@ export default function InterviewSheetForm() {
         </CardContent>
       </Card>
 
+      {/* Source of Deduction/Benefits */}
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Source of Deduction/Benefits</CardTitle>
@@ -620,10 +669,7 @@ export default function InterviewSheetForm() {
               "Spouse Medical Expenses"
             )}
           {renderFileInput("medicalExpensesFile", "Medical Expenses File")}
-          {renderBooleanSelect(
-            "studentLoanInterest",
-            "Student Loan Interest"
-          )}
+          {renderBooleanSelect("studentLoanInterest", "Student Loan Interest")}
           {formData.includeSpouseDetails &&
             renderBooleanSelect(
               "spouseStudentLoanInterest",
@@ -643,6 +689,7 @@ export default function InterviewSheetForm() {
         </CardContent>
       </Card>
 
+      {/* Other Disclosure */}
       <Card className="shadow-none border-none">
         <CardHeader className="px-0">
           <CardTitle>Other Disclosure</CardTitle>
@@ -663,6 +710,7 @@ export default function InterviewSheetForm() {
       </Card>
 
       <Button
+        disabled={isPending}
         type="submit"
         size="lg"
         className="w-fit bg-blue-500 hover:bg-blue-600 !mt-7"

@@ -129,7 +129,7 @@ export default function PreTaxDocuments() {
                       field.onChange(file);
                     }
                   }}
-                  accept=".pdf"
+                  accept=".pdf, .doc, .docx"
                 />
               </FormControl>
               <FormMessage />

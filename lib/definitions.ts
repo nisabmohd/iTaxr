@@ -10,106 +10,109 @@ const passwordSchema = z
   );
 
 export const interviewFormSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, { message: "First name must be at least 2 characters." }),
+  firstName: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
+  }),
   middleName: z.string(),
-  lastName: z
-    .string()
-    .min(2, { message: "Last name must be at least 2 characters." }),
+  lastName: z.string().min(2, {
+    message: "Last name must be at least 2 characters.",
+  }),
   ssn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
   dob: z.string(),
-  spouseFirstName: z
+  spouseFirstName: z.string().optional(),
+  spouseMiddleName: z.string().optional(),
+  spouseLastName: z.string().optional(),
+  spouseEmail: z.string().email().optional(),
+  spousePhoneNumber: z
     .string()
-    .min(2, { message: "First name must be at least 2 characters." }),
-  spouseMiddleName: z.string(),
-  spouseLastName: z
-    .string()
-    .min(2, { message: "Last name must be at least 2 characters." }),
-  spouseEmail: z.string().email(),
-  spousePhoneNumber: z.string()
-    .min(10, "Phone number must be at least 10 digits")
-    .max(20, "Phone number must be 20 digits or fewer")
-    .regex(/^[0-9]+$/, "Phone number should contain only digits"),
-  spouseSsn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
-  spouseDob: z.string(),
+    .min(10, { message: "Phone number must be at least 10 digits." })
+    .max(20, { message: "Phone number must be 20 digits or fewer." })
+    .regex(/^[0-9]+$/, "Phone number should contain only digits")
+    .optional(),
+  spouseSsn: z.string().min(9, {
+    message: "SSN must be at least 9 characters.",
+  }).optional(),
+  spouseDob: z.string().optional(),
   visaCategory: z.string(),
   occupation: z.string(),
-  spouseOccupation: z.string(),
+  spouseOccupation: z.string().optional(),
   currentAddress: z.string(),
   currentCity: z.string(),
   currentState: z.string(),
   zipCode: z.string(),
 
-  dependentDetails: z.array(z.object({
-    firstName: z.string(),
-    middleName: z.string(),
-    lastName: z.string(),
-    relation: z.string(),
-    dob: z.string(),
-    ssn: z.string(),
-  })),
+  dependentDetails: z.array(
+    z.object({
+      firstName: z.string(),
+      middleName: z.string().optional(),
+      lastName: z.string(),
+      relation: z.string(),
+      dob: z.string(),
+      ssn: z.string(),
+    }),
+  ),
+
   residencyStates: z.array(z.string()),
 
   wages: z.number(),
-  spouseWages: z.number(),
-  wagesFile: z.string(),
+  spouseWages: z.number().optional(),
+  wagesFile: z.string().nullable(),
 
-  businessIncome: z.boolean(),
-  spouseBusinessIncome: z.boolean(),
-  businessIncomeFile: z.string(),
+  businessIncome: z.number(),
+  spouseBusinessIncome: z.number().optional(),
+  businessIncomeFile: z.string().nullable(),
 
-  rentalIncome: z.boolean(),
-  spouseRentalIncome: z.boolean(),
-  rentalIncomeFile: z.string(),
+  rentalIncome: z.number(),
+  spouseRentalIncome: z.number().optional(),
+  rentalIncomeFile: z.string().nullable(),
 
-  interestIncome: z.boolean(),
-  spouseInterestIncome: z.boolean(),
-  interestIncomeFile: z.string(),
+  interestIncome: z.number(),
+  spouseInterestIncome: z.number().optional(),
+  interestIncomeFile: z.string().nullable(),
 
-  dividendIncome: z.boolean(),
-  spouseDividendIncome: z.boolean(),
-  dividendIncomeFile: z.string(),
+  dividendIncome: z.number(),
+  spouseDividendIncome: z.number().optional(),
+  dividendIncomeFile: z.string().nullable(),
 
-  saleOfStock_CryptoIncome: z.any(),
-  spouseSaleOfStock_CryptoIncome: z.any(),
-  saleOfStock_CryptoIncomeFile: z.string(),
+  saleOfStock_CryptoIncome: z.number(),
+  spouseSaleOfStock_CryptoIncome: z.number().optional(),
+  saleOfStock_CryptoIncomeFile: z.string().nullable(),
 
-  retirePlanIncome: z.boolean(),
-  spouseRetirePlanIncome: z.boolean(),
-  retirePlanIncomeFile: z.string(),
+  retirePlanIncome: z.number(),
+  spouseRetirePlanIncome: z.number().optional(),
+  retirePlanIncomeFile: z.string().nullable(),
 
-  mortgageInterest: z.boolean(),
-  spouseMortgageInterest: z.boolean(),
-  mortgageInterestFile: z.string(),
+  mortgageInterest: z.number(),
+  spouseMortgageInterest: z.number().optional(),
+  mortgageInterestFile: z.string().nullable(),
 
-  propertyTax: z.boolean(),
-  spousePropertyTax: z.boolean(),
-  propertyTaxFile: z.string(),
+  propertyTax: z.number(),
+  spousePropertyTax: z.number().optional(),
+  propertyTaxFile: z.string().nullable(),
 
-  charitableDonations: z.boolean(),
-  spouseCharitableDonations: z.boolean(),
-  charitableDonationsFile: z.string(),
+  charitableDonations: z.number(),
+  spouseCharitableDonations: z.number().optional(),
+  charitableDonationsFile: z.string().nullable(),
 
-  medicalExpenses: z.boolean(),
-  spouseMedicalExpenses: z.boolean(),
-  medicalExpensesFile: z.string(),
+  medicalExpenses: z.number(),
+  spouseMedicalExpenses: z.number().optional(),
+  medicalExpensesFile: z.string().nullable(),
 
-  studentLoanInterest: z.boolean(),
-  spouseStudentLoanInterest: z.boolean(),
-  studentLoanInterestFile: z.string(),
+  studentLoanInterest: z.number(),
+  spouseStudentLoanInterest: z.number().optional(),
+  studentLoanInterestFile: z.string().nullable(),
 
-  educationExpenses: z.boolean(),
-  spouseEducationExpenses: z.boolean(),
-  educationExpensesFile: z.string(),
+  educationExpenses: z.number(),
+  spouseEducationExpenses: z.number().optional(),
+  educationExpensesFile: z.string().nullable(),
 
   fbar: z.boolean(),
-  spouseFbar: z.boolean(),
-  fbarFile: z.string(),
+  spouseFbar: z.boolean().optional(),
+  fbarFile: z.string().nullable(),
 
   fatca_pfic: z.boolean(),
-  spouseFatca_pfic: z.boolean(),
-  fatca_pfic_File: z.string(),
+  spouseFatca_pfic: z.boolean().optional(),
+  fatca_pfic_File: z.string().nullable(),
 });
 
 export const userRegistrationSchema = z.object({

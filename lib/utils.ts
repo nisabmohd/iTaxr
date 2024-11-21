@@ -64,7 +64,7 @@ export function fileToBase64(file: File): Promise<string> {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      resolve(result.split(",")[1]); // Exclude the "data:..." prefix
+      resolve(result.split(",")[1]);
     };
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
@@ -77,8 +77,9 @@ export const clientFileInputSchema = z
     (file) =>
       [
         "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ].includes(file.type),
-    { message: "Only PDF files are allowed." },
+    { message: "Only PDF and DOCX files are allowed." },
   )
   .refine((file) => file.size <= 2 * 1024 * 1024, {
     message: "File size must be less than 2MB.",
