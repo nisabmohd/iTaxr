@@ -8,6 +8,7 @@ import {
     submitPostTaxDocs,
     submitPreTaxDocs,
     updatePersonalDetails,
+    uplaodDocument,
 } from "@/core/user";
 import { getSession } from "@/lib/session";
 
@@ -81,4 +82,21 @@ export async function postTaxFormAction(
 }
 
 export async function interviewSheetSubmitAction() {
+}
+
+export async function uploadDocumentAction(doc: string) {
+    try {
+        const session = await getSession();
+        if (!session) return { success: false, message: "Unauthorized" };
+        console.log("HERE");
+        return await uplaodDocument(doc)
+    } catch (err) {
+        return {
+            success: false,
+            message: err instanceof Error
+                ? err.message
+                : "Something went wrong",
+        };
+    }
+
 }

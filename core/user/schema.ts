@@ -43,14 +43,24 @@ export const userInterviewDetails = mysqlTable("userInterviewDetails", {
   userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
   fileNumber: char("file_number", { length: 20 }),
   firstName: varchar("first_name", { length: 100 }),
+  spouseFirstName: varchar("spouse_first_name", { length: 100 }),
   middleName: varchar("middle_name", { length: 100 }).notNull(),
+  spouseMiddleName: varchar("spouse_middle_name", { length: 100 }).notNull(),
   lastName: varchar("last_name", { length: 100 }),
+  spouseLastName: varchar("spouse_last_name", { length: 100 }),
+  spouseEmail: varchar("spouse_email", { length: 255 }).notNull(),
+  spousePhoneNumber: varchar("spouse_phone_number", { length: 20 }).notNull(),
   ssn_or_itin: varchar("ssn_or_itin", { length: 20 }),
+  spouse_ssn_or_itin: varchar("spouse_ssn_or_itin", { length: 20 }),
+  dob: date("dob"),
+  spouseDob: date("spouse_dob"),
   currentAddress: varchar("current_address", { length: 255 }),
   currentCity: varchar("current_city", { length: 100 }),
   currentState: varchar("current_state", { length: 30 }),
+  currentZipcode: varchar("current_zipcode", { length: 30 }),
   visaCategory: varchar("visa_category", { length: 50 }).notNull(),
   occupation: varchar("occupation", { length: 100 }),
+  spouseOccupation: varchar("spouse_occupation", { length: 100 }),
   residencyStates: json().$type<ResidencyStates>(),
 });
 
@@ -274,8 +284,4 @@ export const userSourceIncDeductRel = relations(userSourceIncDeduct, ({ one }) =
     fields: [userSourceIncDeduct.fatca_pfic_File],
     references: [documents.id]
   })
-}));
-
-export const documentsRelations = relations(documents, ({ many }) => ({
-  userSourceIncDeduct: many(userSourceIncDeduct)
 }));

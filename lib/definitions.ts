@@ -19,8 +19,23 @@ export const interviewFormSchema = z.object({
     .min(2, { message: "Last name must be at least 2 characters." }),
   ssn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
   dob: z.string(),
+  spouseFirstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
+  spouseMiddleName: z.string(),
+  spouseLastName: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters." }),
+  spouseEmail: z.string().email(),
+  spousePhoneNumber: z.string()
+    .min(10, "Phone number must be at least 10 digits")
+    .max(20, "Phone number must be 20 digits or fewer")
+    .regex(/^[0-9]+$/, "Phone number should contain only digits"),
+  spouseSsn: z.string().min(9, { message: "SSN must be at least 9 characters." }),
+  spouseDob: z.string(),
   visaCategory: z.string(),
   occupation: z.string(),
+  spouseOccupation: z.string(),
   currentAddress: z.string(),
   currentCity: z.string(),
   currentState: z.string(),
