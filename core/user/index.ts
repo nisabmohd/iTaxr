@@ -5,7 +5,7 @@ import {
   userPostTaxDocs,
   userPreTaxDocs,
   users,
-  userSourceIncome_Deductions,
+  userSourceIncDeduct,
 } from "./schema";
 import { z } from "zod";
 import { db } from "@/db/client";
@@ -136,7 +136,7 @@ export const submitInterviewSheet = async (
   const call2 = db.insert(userDependentDetails).values(dependentInsert)
     .execute();
 
-  const call3 = db.insert(userSourceIncome_Deductions).values({
+  const call3 = db.insert(userSourceIncDeduct).values({
     userId: i.id,
 
     wages: i.wages,
