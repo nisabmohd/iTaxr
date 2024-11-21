@@ -82,7 +82,7 @@ export const userPostTaxDocs = mysqlTable("userPostTaxDocs", {
 });
 
 export const userSourceIncDeduct = mysqlTable(
-  "userSourceIncome_Deductions",
+  "userSourceIncDeduct",
   {
     id: int("id").autoincrement().primaryKey(),
     userId: char("user_id", { length: 10 }).notNull().references(() =>
@@ -199,7 +199,7 @@ export const documents = mysqlTable("documents", {
   document: text("document")
 })
 
-export const userSourceIncome_DeductionsRelations = relations(userSourceIncDeduct, ({ one }) => ({
+export const userSourceIncDeductRel = relations(userSourceIncDeduct, ({ one }) => ({
   wagesDocument: one(documents, {
     fields: [userSourceIncDeduct.wagesFile],
     references: [documents.id]
@@ -277,5 +277,5 @@ export const userSourceIncome_DeductionsRelations = relations(userSourceIncDeduc
 }));
 
 export const documentsRelations = relations(documents, ({ many }) => ({
-  userSourceIncome_Deductions: many(userSourceIncDeduct)
+  userSourceIncDeduct: many(userSourceIncDeduct)
 }));

@@ -1,9 +1,40 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "4309630e-f669-4eb7-8645-83e1044a0e00",
+  "id": "baf96e8a-972c-4079-b149-e4b0fa0b1890",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "documents": {
+      "name": "documents",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "document": {
+          "name": "document",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "documents_id": {
+          "name": "documents_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
     "userDependentDetails": {
       "name": "userDependentDetails",
       "columns": {
@@ -110,7 +141,7 @@
         },
         "file_number": {
           "name": "file_number",
-          "type": "char(10)",
+          "type": "char(20)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -239,7 +270,7 @@
         },
         "document_file": {
           "name": "document_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -260,6 +291,19 @@
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userPostTaxDocs_document_file_documents_id_fk": {
+          "name": "userPostTaxDocs_document_file_documents_id_fk",
+          "tableFrom": "userPostTaxDocs",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "document_file"
           ],
           "columnsTo": [
             "id"
@@ -305,7 +349,7 @@
         },
         "document_file": {
           "name": "document_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -332,6 +376,19 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "userPreTaxDocs_document_file_documents_id_fk": {
+          "name": "userPreTaxDocs_document_file_documents_id_fk",
+          "tableFrom": "userPreTaxDocs",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "document_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -345,8 +402,8 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "userSourceIncome_Deductions": {
-      "name": "userSourceIncome_Deductions",
+    "userSourceIncDeduct": {
+      "name": "userSourceIncDeduct",
       "columns": {
         "id": {
           "name": "id",
@@ -378,7 +435,7 @@
         },
         "wages_file": {
           "name": "wages_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -399,7 +456,7 @@
         },
         "business_income_file": {
           "name": "business_income_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -420,7 +477,7 @@
         },
         "rental_income_file": {
           "name": "rental_income_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -441,7 +498,7 @@
         },
         "interest_income_file": {
           "name": "interest_income_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -462,28 +519,28 @@
         },
         "dividend_income_file": {
           "name": "dividend_income_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "sale_of_stock_crypto_income": {
-          "name": "sale_of_stock_crypto_income",
+        "sale_of_st_cry_inc": {
+          "name": "sale_of_st_cry_inc",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "spouse_sale_of_stock_crypto_income": {
-          "name": "spouse_sale_of_stock_crypto_income",
+        "spouse_sale_of_st_cry_inc": {
+          "name": "spouse_sale_of_st_cry_inc",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "sale_of_stock_crypto_income_file": {
-          "name": "sale_of_stock_crypto_income_file",
-          "type": "text",
+        "sale_of_st_cry_inc_file": {
+          "name": "sale_of_st_cry_inc_file",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -504,7 +561,7 @@
         },
         "retire_plan_income_file": {
           "name": "retire_plan_income_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -525,7 +582,7 @@
         },
         "mortgage_interest_file": {
           "name": "mortgage_interest_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -546,7 +603,7 @@
         },
         "property_tax_file": {
           "name": "property_tax_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -567,7 +624,7 @@
         },
         "charitable_donations_file": {
           "name": "charitable_donations_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -588,7 +645,7 @@
         },
         "medical_expenses_file": {
           "name": "medical_expenses_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -609,7 +666,7 @@
         },
         "student_loan_interest_file": {
           "name": "student_loan_interest_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -630,7 +687,7 @@
         },
         "education_expenses_file": {
           "name": "education_expenses_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -651,7 +708,7 @@
         },
         "fbar_file": {
           "name": "fbar_file",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -672,7 +729,7 @@
         },
         "fatca_pfic_File": {
           "name": "fatca_pfic_File",
-          "type": "text",
+          "type": "char(10)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -680,9 +737,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "userSourceIncome_Deductions_user_id_users_id_fk": {
-          "name": "userSourceIncome_Deductions_user_id_users_id_fk",
-          "tableFrom": "userSourceIncome_Deductions",
+        "userSourceIncDeduct_user_id_users_id_fk": {
+          "name": "userSourceIncDeduct_user_id_users_id_fk",
+          "tableFrom": "userSourceIncDeduct",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -692,11 +749,206 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_wages_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_wages_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "wages_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_business_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_business_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "business_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_rental_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_rental_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "rental_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_interest_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_interest_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "interest_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_dividend_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_dividend_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "dividend_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_sale_of_st_cry_inc_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_sale_of_st_cry_inc_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "sale_of_st_cry_inc_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_retire_plan_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_retire_plan_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "retire_plan_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_mortgage_interest_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_mortgage_interest_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "mortgage_interest_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_property_tax_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_property_tax_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "property_tax_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_charitable_donations_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_charitable_donations_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "charitable_donations_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_medical_expenses_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_medical_expenses_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "medical_expenses_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_student_loan_interest_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_student_loan_interest_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "student_loan_interest_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_education_expenses_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_education_expenses_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "education_expenses_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_fbar_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_fbar_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "fbar_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_fatca_pfic_File_documents_id_fk": {
+          "name": "userSourceIncDeduct_fatca_pfic_File_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "fatca_pfic_File"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "userSourceIncome_Deductions_id": {
-          "name": "userSourceIncome_Deductions_id",
+        "userSourceIncDeduct_id": {
+          "name": "userSourceIncDeduct_id",
           "columns": [
             "id"
           ]
