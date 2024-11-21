@@ -86,6 +86,8 @@ export async function postTaxFormAction(
 export async function interviewSheetSubmitAction(
     payload: Omit<InterviewFormPayload, "id">,
 ) {
+    console.log(payload);
+
     const session = await getSession();
     if (!session) return { success: false, message: "Unauthorized" };
     try {
@@ -105,7 +107,6 @@ export async function uploadDocumentAction(doc: string) {
     try {
         const session = await getSession();
         if (!session) return { success: false, message: "Unauthorized" };
-        console.log("HERE");
         const fileId = await uplaodDocument(doc);
         return {
             success: true,

@@ -66,43 +66,43 @@ type FormData = {
   wages: number;
   spouseWages: number;
   wagesFile: string | null;
-  businessIncome: number;
-  spouseBusinessIncome: number;
+  businessIncome: boolean;
+  spouseBusinessIncome: boolean;
   businessIncomeFile: string | null;
-  rentalIncome: number;
-  spouseRentalIncome: number;
+  rentalIncome: boolean;
+  spouseRentalIncome: boolean;
   rentalIncomeFile: string | null;
-  interestIncome: number;
-  spouseInterestIncome: number;
+  interestIncome: boolean;
+  spouseInterestIncome: boolean;
   interestIncomeFile: string | null;
-  dividendIncome: number;
-  spouseDividendIncome: number;
+  dividendIncome: boolean;
+  spouseDividendIncome: boolean;
   dividendIncomeFile: string | null;
-  saleOfStock_CryptoIncome: number;
-  spouseSaleOfStock_CryptoIncome: number;
+  saleOfStock_CryptoIncome: boolean;
+  spouseSaleOfStock_CryptoIncome: boolean;
   saleOfStock_CryptoIncomeFile: string | null;
-  retirePlanIncome: number;
-  spouseRetirePlanIncome: number;
+  retirePlanIncome: boolean;
+  spouseRetirePlanIncome: boolean;
   retirePlanIncomeFile: string | null;
 
   // Source of Deduction/Benefits section
-  mortgageInterest: number;
-  spouseMortgageInterest: number;
+  mortgageInterest: boolean;
+  spouseMortgageInterest: boolean;
   mortgageInterestFile: string | null;
-  propertyTax: number;
-  spousePropertyTax: number;
+  propertyTax: boolean;
+  spousePropertyTax: boolean;
   propertyTaxFile: string | null;
-  charitableDonations: number;
-  spouseCharitableDonations: number;
+  charitableDonations: boolean;
+  spouseCharitableDonations: boolean;
   charitableDonationsFile: string | null;
-  medicalExpenses: number;
-  spouseMedicalExpenses: number;
+  medicalExpenses: boolean;
+  spouseMedicalExpenses: boolean;
   medicalExpensesFile: string | null;
-  studentLoanInterest: number;
-  spouseStudentLoanInterest: number;
+  studentLoanInterest: boolean;
+  spouseStudentLoanInterest: boolean;
   studentLoanInterestFile: string | null;
-  educationExpenses: number;
-  spouseEducationExpenses: number;
+  educationExpenses: boolean;
+  spouseEducationExpenses: boolean;
   educationExpensesFile: string | null;
 
   // Other Disclosure section
@@ -132,7 +132,7 @@ export default function InterviewSheetForm() {
     currentCity: "",
     currentState: "",
     zipCode: "",
-    includeSpouseDetails: true,
+    includeSpouseDetails: false,
     spouseFirstName: "",
     spouseMiddleName: "",
     spouseLastName: "",
@@ -155,41 +155,41 @@ export default function InterviewSheetForm() {
     wages: 0,
     spouseWages: 0,
     wagesFile: null,
-    businessIncome: 0,
-    spouseBusinessIncome: 0,
+    businessIncome: false,
+    spouseBusinessIncome: false,
     businessIncomeFile: null,
-    rentalIncome: 0,
-    spouseRentalIncome: 0,
+    rentalIncome: false,
+    spouseRentalIncome: false,
     rentalIncomeFile: null,
-    interestIncome: 0,
-    spouseInterestIncome: 0,
+    interestIncome: false,
+    spouseInterestIncome: false,
     interestIncomeFile: null,
-    dividendIncome: 0,
-    spouseDividendIncome: 0,
+    dividendIncome: false,
+    spouseDividendIncome: false,
     dividendIncomeFile: null,
-    saleOfStock_CryptoIncome: 0,
-    spouseSaleOfStock_CryptoIncome: 0,
+    saleOfStock_CryptoIncome: false,
+    spouseSaleOfStock_CryptoIncome: false,
     saleOfStock_CryptoIncomeFile: null,
-    retirePlanIncome: 0,
-    spouseRetirePlanIncome: 0,
+    retirePlanIncome: false,
+    spouseRetirePlanIncome: false,
     retirePlanIncomeFile: null,
-    mortgageInterest: 0,
-    spouseMortgageInterest: 0,
+    mortgageInterest: false,
+    spouseMortgageInterest: false,
     mortgageInterestFile: null,
-    propertyTax: 0,
-    spousePropertyTax: 0,
+    propertyTax: false,
+    spousePropertyTax: false,
     propertyTaxFile: null,
-    charitableDonations: 0,
-    spouseCharitableDonations: 0,
+    charitableDonations: false,
+    spouseCharitableDonations: false,
     charitableDonationsFile: null,
-    medicalExpenses: 0,
-    spouseMedicalExpenses: 0,
+    medicalExpenses: false,
+    spouseMedicalExpenses: false,
     medicalExpensesFile: null,
-    studentLoanInterest: 0,
-    spouseStudentLoanInterest: 0,
+    studentLoanInterest: false,
+    spouseStudentLoanInterest: false,
     studentLoanInterestFile: null,
-    educationExpenses: 0,
-    spouseEducationExpenses: 0,
+    educationExpenses: false,
+    spouseEducationExpenses: false,
     educationExpensesFile: null,
     fbar: false,
     spouseFbar: false,
@@ -201,10 +201,15 @@ export default function InterviewSheetForm() {
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value, type } = e.target;
+      const { name, value, type, checked } = e.target;
       setFormData((prev) => ({
         ...prev,
-        [name]: type === "number" ? parseFloat(value) || 0 : value,
+        [name]:
+          type === "number"
+            ? parseFloat(value) || 0
+            : type === "checkbox"
+            ? checked
+            : value,
       }));
     },
     []
