@@ -23,10 +23,10 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { Download } from "lucide-react";
-import { clientFileInputSchema, fileToBase64 } from "@/lib/utils";
+import { fileToBase64, isPdfOrDoc } from "@/lib/utils";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { postTaxFormAction } from "@/actions/user-forms";
+import { postTaxFormAction, uploadDocumentAction } from "@/actions/user-forms";
 
 const documentTypes = [
   { value: "w2", label: "W-2" },
@@ -39,7 +39,7 @@ const FormSchema = z.object({
   documentType: z.string({
     required_error: "Please select a document type.",
   }),
-  file: clientFileInputSchema,
+  file: z.string(),
   remarks: z.string().optional(),
 });
 
@@ -53,18 +53,16 @@ export default function FormsAndDocuments() {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const { file, documentType, remarks } = data;
     startTransition(async () => {
-      const base64File = await fileToBase64(file);
-      console.log(base64File);
       const resp = await postTaxFormAction({
         documentType,
         documentRemarks: remarks,
-        documentTypeFile: base64File,
+        documentTypeFile: file,
       });
 
       if (resp.success) {
         toast({
           title: "Document uploaded",
-          description: `Uploaded ${data.file.name} as ${data.documentType}`,
+          description: `Uploaded  as ${data.documentType}`,
           variant: "success",
         });
         router.refresh();
@@ -156,7 +154,23 @@ export default function FormsAndDocuments() {
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        field.onChange(file);
+                        if (!isPdfOrDoc(file)) {
+                          toast({
+                            title: "Unsupported file",
+                            variant: "destructive",
+                          });
+                          return;
+                        }
+                        startTransition(async () => {
+                          const base64Str = await fileToBase64(file);
+                          const uploadResult = await uploadDocumentAction(
+                            base64Str
+                          );
+                          console.log(uploadResult);
+                          if (uploadResult.success) {
+                            field.onChange(uploadResult.fileId);
+                          }
+                        });
                       }
                     }}
                     accept=".pdf, .doc, .docx"

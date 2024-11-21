@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fileToBase64, states } from "@/lib/utils";
+import { fileToBase64, isPdfOrDoc, states } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import {
   interviewSheetSubmitAction,
@@ -219,6 +219,13 @@ export default function InterviewSheetForm() {
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, files } = e.target;
       if (files && files[0]) {
+        if (!isPdfOrDoc(files[0])) {
+          toast({
+            title: "Unsupported file",
+            variant: "destructive",
+          });
+          return;
+        }
         const base64Str = await fileToBase64(files[0]);
         const uploadResult = await uploadDocumentAction(base64Str);
         console.log(uploadResult);

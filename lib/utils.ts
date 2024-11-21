@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -71,16 +70,11 @@ export function fileToBase64(file: File): Promise<string> {
   });
 }
 
-export const clientFileInputSchema = z
-  .instanceof(File, { message: "Please select a valid file." })
-  .refine(
-    (file) =>
-      [
-        "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ].includes(file.type),
-    { message: "Only PDF and DOCX files are allowed." },
-  )
-  .refine((file) => file.size <= 2 * 1024 * 1024, {
-    message: "File size must be less than 2MB.",
-  });
+export function isPdfOrDoc(file: File) {
+  const allowedTypes = [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ];
+  return allowedTypes.includes(file.type);
+}
