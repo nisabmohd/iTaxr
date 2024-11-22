@@ -15,6 +15,13 @@
       "when": 1732180452846,
       "tag": "0001_bright_ghost_rider",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1732257439971,
+      "tag": "0002_last_wasp",
+      "breakpoints": true
     }
   ]
 }

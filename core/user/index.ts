@@ -122,7 +122,9 @@ export const submitInterviewSheet = async (
     ssn_or_itin: dependent.ssn,
   }));
 
-  const call1 = db.insert(userInterviewDetails).values({
+  const promises = []
+
+  const call1 = await db.insert(userInterviewDetails).values({
     userId: i.id,
     firstName: i.firstName,
     spouseFirstName: i.spouseFirstName,
@@ -146,11 +148,10 @@ export const submitInterviewSheet = async (
     residencyStates: residencyStates,
   }).$returningId().execute();
 
-  const call2 = db.insert(userDependentDetails).values(dependentInsert)
-    .execute();
+  const fileId = call1[0].id
 
-  const call3 = db.insert(userSourceIncDeduct).values({
-    userId: i.id,
+  const call2 = db.insert(userSourceIncDeduct).values({
+    fileId: fileId,
 
     wages: i.wages,
     spouseWages: i.spouseWages,
@@ -211,16 +212,24 @@ export const submitInterviewSheet = async (
     fatca_pfic: i.fatca_pfic,
     spouseFatca_pfic: i.spouseFatca_pfic,
     fatca_pfic_File: i.fatca_pfic_File,
+
   }).execute();
 
-  const [data1] = await Promise.all([call1, call2, call3]);
-  const fileId = data1[0].id;
+  promises.push(call2)
 
-  await db.update(userInterviewDetails).set({
-    fileNumber: `${new Date().toISOString().split("-")[0]}-${
-      fileId.toString().padStart(5, "0")
-    }`,
-  }).where(eq(userInterviewDetails.userId, i.id)).execute();
+  if (dependentInsert.length > 0) {
+    const call3 = db.insert(userDependentDetails).values(dependentInsert)
+      .execute();
+    promises.push(call3)
+  }
+
+  const call4 = db.update(userInterviewDetails).set({
+    fileNumber: `${new Date().toISOString().split("-")[0]}-${fileId.toString().padStart(5, "0")
+      }`,
+  }).where(eq(userInterviewDetails.id, fileId)).execute();
+
+  promises.push(call4)
+  await Promise.all(promises);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

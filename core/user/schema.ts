@@ -66,7 +66,7 @@ export const userInterviewDetails = mysqlTable("userInterviewDetails", {
 
 export const userDependentDetails = mysqlTable("userDependentDetails", {
   id: int("id").autoincrement().primaryKey(),
-  userId: char("user_id", { length: 10 }).notNull().references(() => users.id),
+  fileId: int("file_id").notNull().references(() => userInterviewDetails.id),
   firstName: varchar("first_name", { length: 100 }),
   middleName: varchar("middle_name", { length: 100 }),
   lastName: varchar("last_name", { length: 100 }),
@@ -95,8 +95,8 @@ export const userSourceIncDeduct = mysqlTable(
   "userSourceIncDeduct",
   {
     id: int("id").autoincrement().primaryKey(),
-    userId: char("user_id", { length: 10 }).notNull().references(() =>
-      users.id
+    fileId: int("file_id").notNull().references(() =>
+      userInterviewDetails.id
     ),
     wages: int("wages"),
     spouseWages: int("spouse_wages"),
@@ -159,9 +159,9 @@ export const userInterviewRelation = relations(
 export const userDependentRelation = relations(
   userDependentDetails,
   ({ one }) => ({
-    user: one(users, {
-      fields: [userDependentDetails.userId],
-      references: [users.id],
+    user: one(userInterviewDetails, {
+      fields: [userDependentDetails.fileId],
+      references: [userInterviewDetails.id],
     }),
   }),
 );
@@ -195,9 +195,9 @@ export const userSourceIncomeRelation = relations(users, ({ many }) => ({
 export const sourceIncomeUserRelation = relations(
   userSourceIncDeduct,
   ({ one }) => ({
-    user: one(users, {
-      fields: [userSourceIncDeduct.userId],
-      references: [users.id],
+    user: one(userInterviewDetails, {
+      fields: [userSourceIncDeduct.fileId],
+      references: [userInterviewDetails.id],
     }),
   }),
 );
