@@ -1,0 +1,1208 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "cde7303d-9652-4c7f-8815-9edfb8ba005b",
+  "prevId": "0af52250-13ae-4680-998d-633d76e2f3fe",
+  "tables": {
+    "documents": {
+      "name": "documents",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "document": {
+          "name": "document",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "documents_id": {
+          "name": "documents_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "userDependentDetails": {
+      "name": "userDependentDetails",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "file_id": {
+          "name": "file_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "middle_name": {
+          "name": "middle_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "relation": {
+          "name": "relation",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dob": {
+          "name": "dob",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ssn_or_itin": {
+          "name": "ssn_or_itin",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userDependentDetails_file_id_userInterviewDetails_id_fk": {
+          "name": "userDependentDetails_file_id_userInterviewDetails_id_fk",
+          "tableFrom": "userDependentDetails",
+          "tableTo": "userInterviewDetails",
+          "columnsFrom": [
+            "file_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "userDependentDetails_id": {
+          "name": "userDependentDetails_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "userInterviewDetails": {
+      "name": "userInterviewDetails",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "file_number": {
+          "name": "file_number",
+          "type": "char(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_first_name": {
+          "name": "spouse_first_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "middle_name": {
+          "name": "middle_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "spouse_middle_name": {
+          "name": "spouse_middle_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_last_name": {
+          "name": "spouse_last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_email": {
+          "name": "spouse_email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "spouse_phone_number": {
+          "name": "spouse_phone_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ssn_or_itin": {
+          "name": "ssn_or_itin",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_ssn_or_itin": {
+          "name": "spouse_ssn_or_itin",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dob": {
+          "name": "dob",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_dob": {
+          "name": "spouse_dob",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "current_address": {
+          "name": "current_address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "current_city": {
+          "name": "current_city",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "current_state": {
+          "name": "current_state",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "current_zipcode": {
+          "name": "current_zipcode",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "visa_category": {
+          "name": "visa_category",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "occupation": {
+          "name": "occupation",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_occupation": {
+          "name": "spouse_occupation",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "residencyStates": {
+          "name": "residencyStates",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userInterviewDetails_user_id_users_id_fk": {
+          "name": "userInterviewDetails_user_id_users_id_fk",
+          "tableFrom": "userInterviewDetails",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "userInterviewDetails_id": {
+          "name": "userInterviewDetails_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "userPostTaxDocs": {
+      "name": "userPostTaxDocs",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "document_type": {
+          "name": "document_type",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "document_file": {
+          "name": "document_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "document_file_remarks": {
+          "name": "document_file_remarks",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userPostTaxDocs_user_id_users_id_fk": {
+          "name": "userPostTaxDocs_user_id_users_id_fk",
+          "tableFrom": "userPostTaxDocs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userPostTaxDocs_document_file_documents_id_fk": {
+          "name": "userPostTaxDocs_document_file_documents_id_fk",
+          "tableFrom": "userPostTaxDocs",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "document_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "userPostTaxDocs_id": {
+          "name": "userPostTaxDocs_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "userPreTaxDocs": {
+      "name": "userPreTaxDocs",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "document_type": {
+          "name": "document_type",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "document_file": {
+          "name": "document_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "document_file_remarks": {
+          "name": "document_file_remarks",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userPreTaxDocs_user_id_users_id_fk": {
+          "name": "userPreTaxDocs_user_id_users_id_fk",
+          "tableFrom": "userPreTaxDocs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userPreTaxDocs_document_file_documents_id_fk": {
+          "name": "userPreTaxDocs_document_file_documents_id_fk",
+          "tableFrom": "userPreTaxDocs",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "document_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "userPreTaxDocs_id": {
+          "name": "userPreTaxDocs_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "userSourceIncDeduct": {
+      "name": "userSourceIncDeduct",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "file_id": {
+          "name": "file_id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wages": {
+          "name": "wages",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_wages": {
+          "name": "spouse_wages",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "wages_file": {
+          "name": "wages_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "business_income": {
+          "name": "business_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_business_income": {
+          "name": "spouse_business_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "business_income_file": {
+          "name": "business_income_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rental_income": {
+          "name": "rental_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_rental_income": {
+          "name": "spouse_rental_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rental_income_file": {
+          "name": "rental_income_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "interest_income": {
+          "name": "interest_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_interest_income": {
+          "name": "spouse_interest_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "interest_income_file": {
+          "name": "interest_income_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dividend_income": {
+          "name": "dividend_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_dividend_income": {
+          "name": "spouse_dividend_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "dividend_income_file": {
+          "name": "dividend_income_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sale_of_st_cry_inc": {
+          "name": "sale_of_st_cry_inc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_sale_of_st_cry_inc": {
+          "name": "spouse_sale_of_st_cry_inc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sale_of_st_cry_inc_file": {
+          "name": "sale_of_st_cry_inc_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "retire_plan_income": {
+          "name": "retire_plan_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_retire_plan_income": {
+          "name": "spouse_retire_plan_income",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "retire_plan_income_file": {
+          "name": "retire_plan_income_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mortgage_interest": {
+          "name": "mortgage_interest",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_mortgage_interest": {
+          "name": "spouse_mortgage_interest",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mortgage_interest_file": {
+          "name": "mortgage_interest_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "property_tax": {
+          "name": "property_tax",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_property_tax": {
+          "name": "spouse_property_tax",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "property_tax_file": {
+          "name": "property_tax_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "charitable_donations": {
+          "name": "charitable_donations",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_charitable_donations": {
+          "name": "spouse_charitable_donations",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "charitable_donations_file": {
+          "name": "charitable_donations_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "medical_expenses": {
+          "name": "medical_expenses",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_medical_expenses": {
+          "name": "spouse_medical_expenses",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "medical_expenses_file": {
+          "name": "medical_expenses_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "student_loan_interest": {
+          "name": "student_loan_interest",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_student_loan_interest": {
+          "name": "spouse_student_loan_interest",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "student_loan_interest_file": {
+          "name": "student_loan_interest_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "education_expenses": {
+          "name": "education_expenses",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_education_expenses": {
+          "name": "spouse_education_expenses",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "education_expenses_file": {
+          "name": "education_expenses_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fbar": {
+          "name": "fbar",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_fbar": {
+          "name": "spouse_fbar",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fbar_file": {
+          "name": "fbar_file",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fatca_pfic": {
+          "name": "fatca_pfic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "spouse_fatca_pfic": {
+          "name": "spouse_fatca_pfic",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "fatca_pfic_File": {
+          "name": "fatca_pfic_File",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userSourceIncDeduct_file_id_userInterviewDetails_id_fk": {
+          "name": "userSourceIncDeduct_file_id_userInterviewDetails_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "userInterviewDetails",
+          "columnsFrom": [
+            "file_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_wages_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_wages_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "wages_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_business_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_business_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "business_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_rental_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_rental_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "rental_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_interest_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_interest_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "interest_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_dividend_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_dividend_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "dividend_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_sale_of_st_cry_inc_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_sale_of_st_cry_inc_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "sale_of_st_cry_inc_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_retire_plan_income_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_retire_plan_income_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "retire_plan_income_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_mortgage_interest_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_mortgage_interest_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "mortgage_interest_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_property_tax_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_property_tax_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "property_tax_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_charitable_donations_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_charitable_donations_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "charitable_donations_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_medical_expenses_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_medical_expenses_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "medical_expenses_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_student_loan_interest_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_student_loan_interest_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "student_loan_interest_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_education_expenses_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_education_expenses_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "education_expenses_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_fbar_file_documents_id_fk": {
+          "name": "userSourceIncDeduct_fbar_file_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "fbar_file"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userSourceIncDeduct_fatca_pfic_File_documents_id_fk": {
+          "name": "userSourceIncDeduct_fatca_pfic_File_documents_id_fk",
+          "tableFrom": "userSourceIncDeduct",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "fatca_pfic_File"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "userSourceIncDeduct_id": {
+          "name": "userSourceIncDeduct_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "users": {
+      "name": "users",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "char(10)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "time_created": {
+          "name": "time_created",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "time_updated": {
+          "name": "time_updated",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)"
+        },
+        "time_deleted": {
+          "name": "time_deleted",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "middle_name": {
+          "name": "middle_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email_verified": {
+          "name": "email_verified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "alternate_phone_number": {
+          "name": "alternate_phone_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "employee_name": {
+          "name": "employee_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "office_number": {
+          "name": "office_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'user'"
+        }
+      },
+      "indexes": {
+        "id_idx": {
+          "name": "id_idx",
+          "columns": [
+            "id"
+          ],
+          "isUnique": false
+        },
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        },
+        "phone_idx": {
+          "name": "phone_idx",
+          "columns": [
+            "phone_number"
+          ],
+          "isUnique": true
+        },
+        "role_idx": {
+          "name": "role_idx",
+          "columns": [
+            "role"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "users_id": {
+          "name": "users_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    }
+  },
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {
+      "\"userDependentDetails\".\"user_id\"": "\"userDependentDetails\".\"file_id\"",
+      "\"userSourceIncDeduct\".\"user_id\"": "\"userSourceIncDeduct\".\"file_id\""
+    }
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}
