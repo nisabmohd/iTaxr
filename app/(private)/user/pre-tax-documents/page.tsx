@@ -172,7 +172,7 @@ export default function PreTaxDocuments() {
           disabled={isPending}
           type="submit"
           size="lg"
-          className="w-fit bg-tomato !mt-7"
+          className="w-fit !bg-tomato !mt-7"
         >
           Upload
         </Button>

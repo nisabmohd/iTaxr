@@ -126,7 +126,7 @@ export default function LoginPage() {
                 disabled={isPending}
                 type="submit"
                 size="lg"
-                className="w-full !mt-5 bg-tomato"
+                className="w-full !mt-5 !bg-tomato"
               >
                 {isPending && (
                   <Loader2Icon className="w-4 h-4 animate-spin mr-2" />

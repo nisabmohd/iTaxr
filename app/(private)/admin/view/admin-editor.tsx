@@ -195,7 +195,7 @@ export default function AdminPanelEditor() {
           <Button
             size="lg"
             type="submit"
-            className="w-full bg-tomato"
+            className="w-full !bg-tomato"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Submitting..." : "Submit"}

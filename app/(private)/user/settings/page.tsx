@@ -146,7 +146,7 @@ export default function ChangePassword() {
         <Button
           disabled={isPending}
           type="submit"
-          className="w-fit bg-tomato"
+          className="w-fit !bg-tomato"
           size="lg"
         >
           Change Password

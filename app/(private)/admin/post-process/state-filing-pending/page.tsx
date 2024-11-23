@@ -27,7 +27,7 @@ export default function StateFilingPending() {
           <TableCell>nisabmohd@gmail.com</TableCell>
           <TableCell>636540543</TableCell>
           <TableCell className="text-right">
-            <Button size="sm" className="w-fit bg-tomato m-0">
+            <Button size="sm" className="w-fit !bg-tomato m-0">
               View
             </Button>
           </TableCell>
@@ -38,7 +38,7 @@ export default function StateFilingPending() {
           <TableCell>sohailali@gmail.com</TableCell>
           <TableCell>1367542578</TableCell>
           <TableCell className="text-right">
-            <Button size="sm" className="w-fit bg-tomato m-0">
+            <Button size="sm" className="w-fit !bg-tomato m-0">
               View
             </Button>
           </TableCell>

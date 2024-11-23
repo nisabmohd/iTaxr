@@ -183,7 +183,7 @@ export default function PersonalInfo() {
             )}
           />
         </div>
-        <Button type="submit" className="w-fit bg-tomato" size="lg">
+        <Button type="submit" className="w-fit !bg-tomato" size="lg">
           Submit
         </Button>
       </form>

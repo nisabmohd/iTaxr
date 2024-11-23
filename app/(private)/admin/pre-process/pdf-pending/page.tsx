@@ -32,7 +32,7 @@ export default function PdfPending() {
               href="/admin/view?fileId=240001"
               className={buttonVariants({
                 size: "sm",
-                className: "w-fit bg-tomato m-0",
+                className: "w-fit !bg-tomato m-0",
               })}
             >
               View
@@ -49,7 +49,7 @@ export default function PdfPending() {
               href="/admin/view?fileId=240001"
               className={buttonVariants({
                 size: "sm",
-                className: "w-fit bg-tomato m-0",
+                className: "w-fit !bg-tomato m-0",
               })}
             >
               View
