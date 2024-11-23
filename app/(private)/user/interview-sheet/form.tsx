@@ -223,8 +223,8 @@ export default function InterviewSheetForm() {
           type === "number"
             ? parseFloat(value) || 0
             : type === "checkbox"
-              ? checked
-              : value,
+            ? checked
+            : value,
       }));
     },
     []
@@ -297,7 +297,10 @@ export default function InterviewSheetForm() {
       }
       return (
         <div
-          className={cn("space-y-2", name == "wages" && "space-y-3.5 mt-1")}
+          className={cn(
+            "space-y-2",
+            (name == "wages" || name == "spouseWages") && "space-y-3.5 mt-1"
+          )}
           key={name}
         >
           <Label htmlFor={name} className={cn("flex items-center")}>
@@ -398,7 +401,7 @@ export default function InterviewSheetForm() {
         {formData.dependentDetails.map((dependent, index) => (
           <div
             key={index}
-            className="grid grid-cols-3 gap-6 p-4 border rounded-md mb-4"
+            className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 p-4 border rounded-md mb-4"
           >
             {renderInput(
               `dependentDetails.${index}.firstName` as keyof FormData,
@@ -490,7 +493,7 @@ export default function InterviewSheetForm() {
             supports PDF only which is less than 2MB.
           </p>
         </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-6 px-0">
+        <CardContent className="grid md:grid-cols-3 sm:grid-cols-2 gap-6 px-0">
           {renderSelect(
             "maritalStatus",
             "Marital Status",
@@ -532,7 +535,7 @@ export default function InterviewSheetForm() {
             "Include Spouse Details"
           )}
           {formData.includeSpouseDetails && (
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
               {renderInput("spouseFirstName", "Spouse First Name")}
               {renderInput("spouseMiddleName", "Spouse Middle Name")}
               {renderInput("spouseLastName", "Spouse Last Name")}
@@ -620,7 +623,13 @@ export default function InterviewSheetForm() {
             Enter income details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className={`grid gap-6 px-0 ${formData.includeSpouseDetails ? `grid-cols-3` : `grid-cols-2`}`}>
+        <CardContent
+          className={`grid gap-6 px-0 ${
+            formData.includeSpouseDetails
+              ? `sm:grid-cols-3 md:grid-cols-2`
+              : `sm:grid-cols-2`
+          }`}
+        >
           {renderInput("wages", "Wages", "number")}
           {formData.includeSpouseDetails &&
             renderInput("spouseWages", "Spouse Wages", "number")}
@@ -684,7 +693,13 @@ export default function InterviewSheetForm() {
             Enter deduction details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className={`grid gap-6 px-0 ${formData.includeSpouseDetails ? `grid-cols-3` : `grid-cols-2`}`}>
+        <CardContent
+          className={`grid gap-6 px-0 ${
+            formData.includeSpouseDetails
+              ? `sm:grid-cols-3 md:grid-cols-2`
+              : `sm:grid-cols-2`
+          }`}
+        >
           {renderBooleanSelect("mortgageInterest", "Mortgage Interest")}
           {formData.includeSpouseDetails &&
             renderBooleanSelect(
@@ -741,7 +756,13 @@ export default function InterviewSheetForm() {
             Enter other disclosure details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className={`grid gap-6 px-0 ${formData.includeSpouseDetails ? `grid-cols-3` : `grid-cols-2`}`}>
+        <CardContent
+          className={`grid gap-6 px-0 ${
+            formData.includeSpouseDetails
+              ? `sm:grid-cols-3 md:grid-cols-2`
+              : `sm:grid-cols-2`
+          }`}
+        >
           {renderBooleanSelect("fbar", "FBAR")}
           {formData.includeSpouseDetails &&
             renderBooleanSelect("spouseFbar", "Spouse FBAR")}
@@ -757,7 +778,7 @@ export default function InterviewSheetForm() {
         disabled={isPending}
         type="submit"
         size="lg"
-        className="w-fit bg-blue-500 hover:bg-blue-600 !mt-7"
+        className="w-fit bg-tomato !mt-7"
       >
         Submit Interview Form
       </Button>

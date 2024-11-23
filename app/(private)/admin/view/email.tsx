@@ -66,11 +66,7 @@ const EmailTab = () => {
             rows={15}
           />
         </div>
-        <Button
-          size="lg"
-          onClick={handleSend}
-          className="w-fit bg-blue-500 hover:bg-blue-600"
-        >
+        <Button size="lg" onClick={handleSend} className="w-fit bg-tomato">
           Send Email
         </Button>
       </CardContent>

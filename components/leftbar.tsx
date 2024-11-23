@@ -31,7 +31,7 @@ export function UserLeftbar() {
         {user_links.map((link) => (
           <Anchor
             className="text-sm p-3 flex items-center gap-2.5"
-            activeClassName="bg-secondary rounded-md text-blue-500"
+            activeClassName="bg-secondary rounded-md text-tomato"
             href={link.href}
             key={link.href}
           >
@@ -83,7 +83,7 @@ export function AdminLeftbar() {
                         key={subItem.href}
                         href={subItem.href}
                         className="text-sm p-2 px-3 flex items-center hover:bg-secondary rounded-md"
-                        activeClassName="bg-secondary text-blue-500"
+                        activeClassName="bg-secondary text-tomato"
                       >
                         {subItem.title}
                       </Anchor>

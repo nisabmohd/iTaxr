@@ -209,7 +209,7 @@ export default function PersonalInfoForm({
         <Button
           disabled={isPending}
           type="submit"
-          className="w-fit bg-blue-500 hover:bg-blue-600"
+          className="w-fit bg-tomato"
           size="lg"
         >
           Update

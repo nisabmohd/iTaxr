@@ -183,11 +183,7 @@ export default function PersonalInfo() {
             )}
           />
         </div>
-        <Button
-          type="submit"
-          className="w-fit bg-blue-500 hover:bg-blue-600"
-          size="lg"
-        >
+        <Button type="submit" className="w-fit bg-tomato" size="lg">
           Submit
         </Button>
       </form>

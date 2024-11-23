@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
-const fontSans = Space_Grotesk({
+const fontSans = DM_Sans({
   variable: "--font-sans",
   weight: "400",
   subsets: ["latin"],

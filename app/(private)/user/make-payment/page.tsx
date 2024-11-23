@@ -7,9 +7,7 @@ export default function PaymentPage() {
       <p className="text-sm text-muted-foreground mb-7 mt-2">
         Please click the following to make the payment
       </p>
-      <Button className="w-fit bg-blue-500 hover:bg-blue-600">
-        Make payment
-      </Button>
+      <Button className="w-fit bg-tomato">Make payment</Button>
     </div>
   );
 }
