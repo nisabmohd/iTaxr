@@ -112,16 +112,6 @@ export const submitInterviewSheet = async (
 ) => {
   const residencyStates: ResidencyStates = { states: i.residencyStates };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dependentInsert: any = i.dependentDetails.map((dependent) => ({
-    userId: i.id,
-    firstName: dependent.firstName,
-    middleName: dependent.middleName,
-    lastName: dependent.lastName,
-    relation: dependent.relation,
-    dob: dependent.dob,
-    ssn_or_itin: dependent.ssn,
-  }));
-
   const promises = []
 
   const call1 = await db.insert(userInterviewDetails).values({
@@ -216,6 +206,16 @@ export const submitInterviewSheet = async (
   }).execute();
 
   promises.push(call2)
+
+  const dependentInsert: any = i.dependentDetails.map((dependent) => ({
+    fileId: fileId,
+    firstName: dependent.firstName,
+    middleName: dependent.middleName,
+    lastName: dependent.lastName,
+    relation: dependent.relation,
+    dob: dependent.dob,
+    ssn_or_itin: dependent.ssn,
+  }));
 
   if (dependentInsert.length > 0) {
     const call3 = db.insert(userDependentDetails).values(dependentInsert)
