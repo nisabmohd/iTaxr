@@ -132,7 +132,7 @@ export default function InterviewSheetForm() {
     currentCity: "",
     currentState: "",
     zipCode: "",
-    includeSpouseDetails: false,
+    includeSpouseDetails: true,
     spouseFirstName: "",
     spouseMiddleName: "",
     spouseLastName: "",
@@ -199,10 +199,14 @@ export default function InterviewSheetForm() {
     fatca_pfic_File: null,
   });
 
+  const [currentDependendChanging, setCurrentDependentChanging] =
+    useState<string>();
+
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value, type, checked } = e.target;
       if (name.includes("dependentDetails")) {
+        setCurrentDependentChanging(name);
         setFormData((prev) => {
           const [index, indexFeild] = name.split(".").slice(1);
           const dependentCopy = [...prev["dependentDetails"]];
@@ -285,7 +289,8 @@ export default function InterviewSheetForm() {
       name: keyof FormData,
       label: string,
       type: string = "text",
-      required: boolean = false
+      required: boolean = false,
+      index: number = 0
     ) => {
       let inputValue = formData[name] as string;
       // dependentDetails.0.firstname
@@ -295,6 +300,12 @@ export default function InterviewSheetForm() {
         // @ts-ignore
         inputValue = formData["dependentDetails"][+index][indexKey];
       }
+      const [indexValueState, indexKeyState] = (currentDependendChanging ?? "")!
+        .split(".")
+        .slice(1);
+
+      const [indexKeyName] = name!.split(".").slice(2);
+
       return (
         <div
           className={cn(
@@ -314,11 +325,14 @@ export default function InterviewSheetForm() {
             value={inputValue}
             onChange={handleInputChange}
             required={required}
+            autoFocus={
+              indexKeyState == indexKeyName && index == +indexValueState
+            }
           />
         </div>
       );
     },
-    [formData, handleInputChange]
+    [formData, handleInputChange, currentDependendChanging]
   );
 
   const renderFileInput = useCallback(
@@ -407,7 +421,8 @@ export default function InterviewSheetForm() {
               `dependentDetails.${index}.firstName` as keyof FormData,
               "First Name",
               "text",
-              true
+              true,
+              index
             )}
             {renderInput(
               `dependentDetails.${index}.middleName` as keyof FormData,
@@ -417,23 +432,29 @@ export default function InterviewSheetForm() {
               `dependentDetails.${index}.lastName` as keyof FormData,
               "Last Name",
               "text",
-              true
+              true,
+              index
             )}
             {renderInput(
               `dependentDetails.${index}.relation` as keyof FormData,
               "Relation",
               "text",
-              true
+              true,
+              index
             )}
             {renderInput(
               `dependentDetails.${index}.dob` as keyof FormData,
               "Date of Birth",
               "date",
-              true
+              true,
+              index
             )}
             {renderInput(
               `dependentDetails.${index}.ssn` as keyof FormData,
-              "SSN"
+              "SSN",
+              undefined,
+              undefined,
+              index
             )}
             <Button
               type="button"
