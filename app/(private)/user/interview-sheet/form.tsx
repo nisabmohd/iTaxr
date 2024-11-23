@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { fileToBase64, isPdfOrDoc, states } from "@/lib/utils";
+import { cn, fileToBase64, isPdfOrDoc, states } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import {
   interviewSheetSubmitAction,
@@ -202,6 +202,21 @@ export default function InterviewSheetForm() {
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value, type, checked } = e.target;
+      if (name.includes("dependentDetails")) {
+        setFormData((prev) => {
+          const [index, indexFeild] = name.split(".").slice(1);
+          const dependentCopy = [...prev["dependentDetails"]];
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          dependentCopy[+index][indexFeild] = value;
+          return {
+            ...prev,
+            dependentDetails: dependentCopy,
+          };
+        });
+        return;
+      }
+
       setFormData((prev) => ({
         ...prev,
         [name]:
@@ -237,7 +252,7 @@ export default function InterviewSheetForm() {
           }));
       }
     },
-    []
+    [toast]
   );
 
   const handleSubmit = useCallback(
@@ -271,22 +286,35 @@ export default function InterviewSheetForm() {
       label: string,
       type: string = "text",
       required: boolean = false
-    ) => (
-      <div className="space-y-2" key={name}>
-        <Label htmlFor={name} className="flex items-center">
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </Label>
-        <Input
-          type={type}
-          id={name}
-          name={name}
-          value={formData[name] as string}
-          onChange={handleInputChange}
-          required={required}
-        />
-      </div>
-    ),
+    ) => {
+      let inputValue = formData[name] as string;
+      // dependentDetails.0.firstname
+      if (name.includes("dependentDetails")) {
+        const [index, indexKey] = name.split(".").slice(1);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        inputValue = formData["dependentDetails"][+index][indexKey];
+      }
+      return (
+        <div
+          className={cn("space-y-2", name == "wages" && "space-y-3.5 mt-1")}
+          key={name}
+        >
+          <Label htmlFor={name} className={cn("flex items-center")}>
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </Label>
+          <Input
+            type={type}
+            id={name}
+            name={name}
+            value={inputValue}
+            onChange={handleInputChange}
+            required={required}
+          />
+        </div>
+      );
+    },
     [formData, handleInputChange]
   );
 
@@ -368,7 +396,10 @@ export default function InterviewSheetForm() {
     return (
       <>
         {formData.dependentDetails.map((dependent, index) => (
-          <div key={index} className="space-y-4 p-4 border rounded-md mb-4">
+          <div
+            key={index}
+            className="grid grid-cols-3 gap-6 p-4 border rounded-md mb-4"
+          >
             {renderInput(
               `dependentDetails.${index}.firstName` as keyof FormData,
               "First Name",
@@ -403,6 +434,7 @@ export default function InterviewSheetForm() {
             )}
             <Button
               type="button"
+              className="w-fit"
               variant="destructive"
               onClick={() => {
                 const newDependents = [...formData.dependentDetails];
@@ -458,7 +490,7 @@ export default function InterviewSheetForm() {
             supports PDF only which is less than 2MB.
           </p>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 gap-6 px-0">
+        <CardContent className="grid grid-cols-3 gap-6 px-0">
           {renderSelect(
             "maritalStatus",
             "Marital Status",
@@ -500,7 +532,7 @@ export default function InterviewSheetForm() {
             "Include Spouse Details"
           )}
           {formData.includeSpouseDetails && (
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-3 gap-6">
               {renderInput("spouseFirstName", "Spouse First Name")}
               {renderInput("spouseMiddleName", "Spouse Middle Name")}
               {renderInput("spouseLastName", "Spouse Last Name")}
@@ -557,7 +589,7 @@ export default function InterviewSheetForm() {
             {formData.residencyStates.map((state, index) => (
               <span
                 key={index}
-                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 mr-2 mb-2"
               >
                 {state}
                 <button
@@ -588,7 +620,7 @@ export default function InterviewSheetForm() {
             Enter income details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className="space-y-6 px-0">
+        <CardContent className="grid grid-cols-3 gap-6 px-0">
           {renderInput("wages", "Wages", "number")}
           {formData.includeSpouseDetails &&
             renderInput("spouseWages", "Spouse Wages", "number")}
@@ -652,7 +684,7 @@ export default function InterviewSheetForm() {
             Enter deduction details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className="space-y-6 px-0">
+        <CardContent className="grid grid-cols-3 gap-6 px-0">
           {renderBooleanSelect("mortgageInterest", "Mortgage Interest")}
           {formData.includeSpouseDetails &&
             renderBooleanSelect(
@@ -709,7 +741,7 @@ export default function InterviewSheetForm() {
             Enter other disclosure details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className="space-y-6 px-0">
+        <CardContent className="grid grid-cols-3 gap-6 px-0">
           {renderBooleanSelect("fbar", "FBAR")}
           {formData.includeSpouseDetails &&
             renderBooleanSelect("spouseFbar", "Spouse FBAR")}
