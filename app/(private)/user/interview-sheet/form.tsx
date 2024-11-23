@@ -223,8 +223,8 @@ export default function InterviewSheetForm() {
           type === "number"
             ? parseFloat(value) || 0
             : type === "checkbox"
-            ? checked
-            : value,
+              ? checked
+              : value,
       }));
     },
     []
@@ -620,7 +620,7 @@ export default function InterviewSheetForm() {
             Enter income details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-6 px-0">
+        <CardContent className={`grid gap-6 px-0 ${formData.includeSpouseDetails ? `grid-cols-3` : `grid-cols-2`}`}>
           {renderInput("wages", "Wages", "number")}
           {formData.includeSpouseDetails &&
             renderInput("spouseWages", "Spouse Wages", "number")}
@@ -684,7 +684,7 @@ export default function InterviewSheetForm() {
             Enter deduction details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-6 px-0">
+        <CardContent className={`grid gap-6 px-0 ${formData.includeSpouseDetails ? `grid-cols-3` : `grid-cols-2`}`}>
           {renderBooleanSelect("mortgageInterest", "Mortgage Interest")}
           {formData.includeSpouseDetails &&
             renderBooleanSelect(
@@ -741,7 +741,7 @@ export default function InterviewSheetForm() {
             Enter other disclosure details and also can upload PDF files
           </p>
         </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-6 px-0">
+        <CardContent className={`grid gap-6 px-0 ${formData.includeSpouseDetails ? `grid-cols-3` : `grid-cols-2`}`}>
           {renderBooleanSelect("fbar", "FBAR")}
           {formData.includeSpouseDetails &&
             renderBooleanSelect("spouseFbar", "Spouse FBAR")}
